@@ -10,6 +10,7 @@ import {
   getTeachersByDepartment,
   searchTeachers
 } from "../controllers/teacherController.js";
+import { authenticate } from "../middleware/auth.js";
 
 const  router = express.Router();
 
@@ -18,7 +19,7 @@ router.post("/register", addTeacher);
 router.post("/login", loginTeacher);
 
 // Protected routes (add authMiddleware if you have authentication middleware)
-router.get("/", getAllTeachers);
+router.get("/teachers",authenticate, getAllTeachers);
 router.get("/search", searchTeachers);
 router.get("/department/:department", getTeachersByDepartment);
 router.get("/:id", getTeacherById);

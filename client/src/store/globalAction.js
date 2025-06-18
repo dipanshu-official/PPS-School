@@ -4,9 +4,8 @@ import axiosInstance from "../api/axiosInstance";
 // Utility for setting auth headers
 const getAuthHeaders = () => {
   const token = localStorage.getItem("authToken");
-  return {
-    Authorization: `Bearer ${token}`,
-  };
+  return  `Bearer ${token}`
+
 };
 
 export const addStudent = createAsyncThunk(
@@ -125,6 +124,26 @@ export const addTeacher = createAsyncThunk(
   }
 );
 
+export const getAllTeacher = createAsyncThunk(
+  "teacher/teachers",
+  async (_, { rejectWithValue }) => {
+    try {
+      console.log("getAuthHeaders =>",getAuthHeaders())
+      const response = await axiosInstance.get("/teachers" ,{
+        headers:{
+          Authorization:getAuthHeaders()
+        }
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch teachers"
+      );
+    }
+  }
+);
+
+
 // Login Student Thunk
 export const loginTeacher = createAsyncThunk(
   "student/login",
@@ -139,8 +158,8 @@ export const loginTeacher = createAsyncThunk(
       });
 
       // Store token in localStorage if provided
-      if (response.data.token) {
-        localStorage.setItem("authToken", response.data.token);
+      if (response.data.data.token) {
+        localStorage.setItem("authToken", response.data.data.token);
       }
 
       return response.data;
@@ -164,8 +183,8 @@ export const loginPrinciple = createAsyncThunk(
         role,
       });
 
-      if (response.data.token) {
-        localStorage.setItem("authToken", response.data.token);
+      if (response.data.data.token) {
+        localStorage.setItem("authToken", response.data.data.token);
       }
 
       return response.data;

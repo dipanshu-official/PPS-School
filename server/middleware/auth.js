@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import User from '../models/User.js';
+
 
 export const authenticate = async (req, res, next) => {
   try {
@@ -13,23 +13,8 @@ export const authenticate = async (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.id).select('-password');
     
-    if (!user) {
-      return res.status(401).json({
-        success: false,
-        message: 'Invalid token. User not found.'
-      });
-    }
-
-    if (!user.isActive) {
-      return res.status(401).json({
-        success: false,
-        message: 'Account is deactivated.'
-      });
-    }
-
-    req.user = user;
+    req.shiva = decoded;
     next();
   } catch (error) {
     if (error.name === 'JsonWebTokenError') {

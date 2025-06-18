@@ -13,3 +13,13 @@ export const teacherDataSelector = createSelector(
   [globlState],
   (state) => state.teacherData
 );
+
+export const pricipalDataSelector = createSelector(
+  [globlState],
+  (state) => state.principleData
+);
+
+export const allteacherDataSelector = createSelector(
+  [globlState],
+  (state) => state.allTeacher
+);

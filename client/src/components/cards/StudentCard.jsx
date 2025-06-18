@@ -1,15 +1,19 @@
-const StudentCard = ({ student, onEdit, onDelete }) => {
+import {useSelector} from "react-redux"
+import { studentDataSelector } from "../../store/globalSelctor";
+
+const StudentCard = () => {
+  const student = useSelector(studentDataSelector)
+  console.log("student=>",student)
   return (
     <div className="card-interactive p-6 animate-fade-scale">
       <div className="flex items-center justify-between mb-4">
         <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-teal-600 rounded-full flex items-center justify-center shadow-lg">
           <span className="text-white font-bold text-lg">
-            {student.firstName.charAt(0)}{student.lastName.charAt(0)}
+           first name
           </span>
         </div>
         <div className="flex space-x-2">
           <button
-            onClick={() => onEdit(student)}
             className="text-blue-600 hover:text-blue-700 p-2 rounded-lg hover:bg-blue-50 transition-all duration-200 group"
             title="Edit Student"
           >
@@ -18,7 +22,6 @@ const StudentCard = ({ student, onEdit, onDelete }) => {
             </svg>
           </button>
           <button
-            onClick={() => onDelete(student.id)}
             className="text-red-600 hover:text-red-700 p-2 rounded-lg hover:bg-red-50 transition-all duration-200 group"
             title="Delete Student"
           >

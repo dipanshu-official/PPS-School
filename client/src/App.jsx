@@ -6,19 +6,23 @@ import PrincipalDashboard from "./pages/principal/PrincipalDashboard";
 import TeacherDashboard from "./pages/teacher/TeacherDashboard";
 import StudentDashboard from "./pages/student/StudentDashboard";
 import PrivateRoute from "./pages/PrivateRoute";
+import { Toaster } from "react-hot-toast";
 
 const App = () => {
   return (
-    <Router>
-      <Routes>
-        <Route path="*" element={<LoginPage />} />
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/principal" element={<PrincipalDashboard />} />
-        <Route path="/teacher" element={<TeacherDashboard />} />
-        <Route path="/student" element={<StudentDashboard />} />
-      </Routes>
-    </Router>
+    <>
+      <Toaster position="top-center" />
+      <Router>
+        <Routes>
+          <Route path="*" element={<LoginPage />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/principal" element={<PrincipalDashboard />} />
+          <Route path="/teacher" element={<TeacherDashboard />} />
+          <Route path="/student" element={<StudentDashboard />} />
+        </Routes>
+      </Router>
+    </>
   );
 };
 

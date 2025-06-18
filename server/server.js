@@ -7,7 +7,6 @@ import dotenv from 'dotenv';
 
 // Import 
 import connectDB from './config/db.js'
-import userRoute from './routes/userRoute.js'
 import studentRoutes from './routes/students.js';
 import teacherRoutes from './routes/teachers.js';
 import princpleRoutes from './routes/principle.js'
@@ -49,7 +48,6 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 connectDB()
 
 // Routes
-app.use('/api', userRoute);
 app.use('/api', studentRoutes);
 app.use('/api', teacherRoutes);
 app.use('/api', princpleRoutes);

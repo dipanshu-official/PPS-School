@@ -10,8 +10,7 @@ export const addTeacher = async (req, res) => {
       lastName,
       email,
       password,
-
-      subjects,
+      
     } = req.body;
 
     // Validation
@@ -42,7 +41,7 @@ export const addTeacher = async (req, res) => {
       lastName,
       email,
       password: hashedPassword,
-      subjects,
+     
     });
 
     await newTeacher.save();
@@ -84,7 +83,7 @@ export const loginTeacher = async (req, res) => {
     if (!teacher) {
       return res.status(401).json({
         success: false,
-        message: "Invalid email or password",
+        message: "Invalid email or password T ",
       });
     }
 
@@ -93,7 +92,7 @@ export const loginTeacher = async (req, res) => {
     if (!isPasswordValid) {
       return res.status(401).json({
         success: false,
-        message: "Invalid email or password",
+        message: "Invalid email or password P",
       });
     }
 
@@ -109,16 +108,15 @@ export const loginTeacher = async (req, res) => {
     );
 
     // Remove password from response
-    const teacherResponse = teacher.toObject();
-    delete teacherResponse.password;
+    
 
     res.status(200).json({
       success: true,
       message: "Login successful",
       data: {
-        teacher: teacherResponse,
+        teacher,
         token,
-        role,
+       
       },
     });
   } catch (error) {
@@ -134,8 +132,13 @@ export const loginTeacher = async (req, res) => {
 // Get All Teachers
 export const getAllTeachers = async (req, res) => {
   try {
+    console.log("custom req",req.shiva)
+    if (req.shiva.role != "principal") {
+      res.status(401).json("you are not a pricipal");
+      return
+    }
     const teachers = await Teacher.find({}).select("-password");
-
+console.log("header value",req.headers.authorization)
     res.status(200).json({
       success: true,
       message: "Teachers retrieved successfully",
@@ -324,7 +327,7 @@ export const getTeachersByDepartment = async (req, res) => {
 };
 
 // Search Teachers
-export const searchTeachers = async (req, res) => {
+export const searchTeachers = async (req, res ,next) => {
   try {
     const { query } = req.query;
 

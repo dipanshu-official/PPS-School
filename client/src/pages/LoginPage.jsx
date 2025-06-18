@@ -1,11 +1,13 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   loginPrinciple,
   loginStudent,
   loginTeacher,
 } from "../store/globalAction";
 import { useNavigate, Navigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { pricipalDataSelector } from "../store/globalSelctor";
 
 const LoginPage = () => {
   const [selectedRole, setSelectedRole] = useState("");
@@ -19,6 +21,14 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const principleData = useSelector(pricipalDataSelector);
+
+  useEffect(() => {
+    console.log("p =>",principleData)
+    if (principleData != null) {
+      navigate("/principal");
+    }
+  }, [principleData]);
 
   const roles = [
     {
@@ -122,16 +132,18 @@ const LoginPage = () => {
       switch (selectedRole) {
         case "principal":
           await dispatch(loginPrinciple(loginData));
-          navigate("/principal");
+          toast.success("login successfully principal");
           break;
         case "teacher":
           await dispatch(loginTeacher(loginData));
           navigate("/teacher");
+          toast.success("login successfully teacher");
 
           break;
         case "student":
           await dispatch(loginStudent(loginData));
           navigate("/student");
+          toast.success("login successfully student");
 
           break;
         default:
