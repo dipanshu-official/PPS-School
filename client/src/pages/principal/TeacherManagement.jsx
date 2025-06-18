@@ -1,0 +1,143 @@
+import { useState } from 'react';
+import TeacherCard from '../../components/cards/TeacherCard';
+import TeacherModal from '../../components/modals/TeacherModal';
+
+const TeacherManagement = () => {
+  const [teachers, setTeachers] = useState([
+    {
+      id: 1,
+      firstName: 'Emily',
+      lastName: 'Johnson',
+      email: 'emily.johnson@plasmapathways.edu',
+      password: 'teacher123',
+      subject: 'Mathematics'
+    },
+    {
+      id: 2,
+      firstName: 'Michael',
+      lastName: 'Davis',
+      email: 'michael.davis@plasmapathways.edu',
+      password: 'teacher456',
+      subject: 'English Literature'
+    },
+    {
+      id: 3,
+      firstName: 'Sarah',
+      lastName: 'Smith',
+      email: 'sarah.smith@plasmapathways.edu',
+      password: 'teacher789',
+      subject: 'Science'
+    },
+    {
+      id: 4,
+      firstName: 'David',
+      lastName: 'Wilson',
+      email: 'david.wilson@plasmapathways.edu',
+      password: 'teacher101',
+      subject: 'History'
+    },
+    {
+      id: 5,
+      firstName: 'Lisa',
+      lastName: 'Garcia',
+      email: 'lisa.garcia@plasmapathways.edu',
+      password: 'teacher202',
+      subject: 'Art'
+    },
+    {
+      id: 6,
+      firstName: 'Robert',
+      lastName: 'Brown',
+      email: 'robert.brown@plasmapathways.edu',
+      password: 'teacher303',
+      subject: 'Physical Education'
+    }
+  ]);
+
+  const [editingTeacher, setEditingTeacher] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+
+  const handleAdd = () => {
+    setEditingTeacher(null);
+    setShowModal(true);
+  };
+
+  const handleEdit = (teacher) => {
+    setEditingTeacher(teacher);
+    setShowModal(true);
+  };
+
+  const handleDelete = (teacherId) => {
+    if (window.confirm('Are you sure you want to delete this teacher?')) {
+      setTeachers(teachers.filter(teacher => teacher.id !== teacherId));
+    }
+  };
+
+  const handleSave = (teacherData) => {
+    if (editingTeacher) {
+      // Update existing teacher
+      setTeachers(teachers.map(teacher => 
+        teacher.id === editingTeacher.id 
+          ? { ...teacher, ...teacherData }
+          : teacher
+      ));
+    } else {
+      // Add new teacher
+      const newTeacher = {
+        id: Math.max(...teachers.map(t => t.id)) + 1,
+        ...teacherData
+      };
+      setTeachers([...teachers, newTeacher]);
+    }
+    setShowModal(false);
+  };
+
+  const handleCancel = () => {
+    setShowModal(false);
+    setEditingTeacher(null);
+  };
+
+  return (
+    <>
+      {/* Header */}
+      <div className="flex justify-between items-center mb-8">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Teacher Management</h2>
+          <p className="text-gray-600">Manage all teachers and their information</p>
+        </div>
+        <button
+          onClick={handleAdd}
+          className="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors duration-200 font-semibold flex items-center space-x-2"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+          </svg>
+          <span>Add New Teacher</span>
+        </button>
+      </div>
+
+      {/* Teachers Grid */}
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {teachers.map((teacher) => (
+          <TeacherCard
+            key={teacher.id}
+            teacher={teacher}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+          />
+        ))}
+      </div>
+
+      {/* Modal */}
+      {showModal && (
+        <TeacherModal
+          teacher={editingTeacher}
+          onSave={handleSave}
+          onCancel={handleCancel}
+        />
+      )}
+    </>
+  );
+};
+
+export default TeacherManagement;
