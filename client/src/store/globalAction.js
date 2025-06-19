@@ -10,6 +10,7 @@ const getAuthHeaders = () => {
 export const addStudent = createAsyncThunk(
   "student/addStudent",
   async (studentData, { rejectWithValue }) => {
+    console.log("student add call")
     try {
       const {
         email,

@@ -10,7 +10,6 @@ import {
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  addingStudent: false,
   studentData: null,
   delstudent: [],
   teacherData: null,
@@ -35,6 +34,10 @@ const globalSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+   
+
+    
+
     builder.addCase(loginStudent.fulfilled, (state, action) => {
       state.studentData = action.payload.data.student;
     });

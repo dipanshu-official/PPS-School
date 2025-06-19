@@ -31,16 +31,21 @@ const StudentModal = ({ student, onSave, onCancel }) => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    try {
+      e.preventDefault();
+      console.log("hi hhh")
 
-    const userData = {
-      firstName: student.firstName,
-      lastName: student.lastName,
-      email: student.email,
-      password: student.password,
-      phone: student.phone,
-    };
-    dispatch(addStudent(userData))
+      const userData = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        password: formData.password,
+        phone: formData.phone,
+      };
+      dispatch(addStudent(userData));
+    } catch (error) {
+      console.log("err",error)
+    }
   };
 
   return (
@@ -71,10 +76,12 @@ const StudentModal = ({ student, onSave, onCancel }) => {
             </button>
           </div>
 
-          <form onSubmit={() => {
-            handleSubmit()
-            console.log("hi")
-          }} className="space-y-4">
+          <form
+            onSubmit={(e) => {
+              handleSubmit(e);
+            }}
+            className="space-y-4"
+          >
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label
@@ -170,7 +177,7 @@ const StudentModal = ({ student, onSave, onCancel }) => {
             <div className="flex justify-end space-x-3 pt-4">
               <button
                 type="button"
-                onClick={onCancel}
+                onClick={handleSubmit}
                 className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200"
               >
                 Cancel
