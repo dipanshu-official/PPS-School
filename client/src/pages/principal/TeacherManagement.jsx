@@ -147,7 +147,7 @@ const TeacherManagement = () => {
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {allTeacher.map((teacher) => (
           <TeacherCard
-            key={teacher.id}
+            key={teacher._id}
             teacher={teacher}
             onEdit={handleEdit}
             onDelete={handleDelete}

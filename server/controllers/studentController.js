@@ -1,5 +1,6 @@
 import Student from "../models/Student.js";
 import jwt from "jsonwebtoken";
+import Teacher from "../models/Teacher.js";
 
 // Add a new student
 export const addStudent = async (req, res) => {
@@ -76,7 +77,7 @@ export const loginStudent = async (req, res) => {
     const { email, password } = req.body;
 
     // Validate required fields
-    if (!email || !password || !role) {
+    if (!email || !password ) {
       return res.status(400).json({
         success: false,
         message: "Email, password, and role are required",
@@ -95,14 +96,6 @@ export const loginStudent = async (req, res) => {
       });
     }
 
-    // Check if role matches
-    // if (student.role !== role) {
-    //   return res.status(401).json({
-    //     success: false,
-    //     message: "Invalid role for this account",
-    //   });
-    // }
-
     // Verify password
     if (student.password !== password) {
       return res.status(401).json({
@@ -116,7 +109,7 @@ export const loginStudent = async (req, res) => {
       {
         id: student._id,
         email: student.email,
-        role: student.role,
+       
       },
       process.env.JWT_SECRET || "your-secret-key", // Use environment variable
       { expiresIn: "7d" } // Token expires in 7 days
@@ -152,39 +145,14 @@ export const loginStudent = async (req, res) => {
 
 export const getAllStudents = async (req, res) => {
   try {
-    const { page = 1, limit = 10, search = "" } = req.query;
-
-    // Build search query
-    const searchQuery = search
-      ? {
-          $or: [
-            { firstName: { $regex: search, $options: "i" } },
-            { lastName: { $regex: search, $options: "i" } },
-            { email: { $regex: search, $options: "i" } },
-            { phone: { $regex: search, $options: "i" } },
-            { parentName: { $regex: search, $options: "i" } },
-          ],
-        }
-      : {};
-
-    const students = await Student.find(searchQuery)
-      .limit(limit * 1)
-      .skip((page - 1) * limit)
-      .sort({ createdAt: -1 });
-
-    const total = await Student.countDocuments(searchQuery);
-
+    console.log(req.shiva)
+    const students = await Student.find({}).select("-password")
     res.status(200).json({
-      success: true,
-      data: students,
-      pagination: {
-        currentPage: parseInt(page),
-        totalPages: Math.ceil(total / limit),
-        totalStudents: total,
-        hasNextPage: page < Math.ceil(total / limit),
-        hasPrevPage: page > 1,
-      },
-    });
+      success:true,
+      message:"student getall successfully",
+      data:students,
+      count :students.length
+    })
   } catch (error) {
     res.status(500).json({
       success: false,

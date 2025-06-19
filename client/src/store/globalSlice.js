@@ -1,13 +1,22 @@
-import { addStudent, loginStudent ,loginTeacher , loginPrinciple , getAllTeacher } from "./globalAction";
+import {
+  addStudent,
+  loginStudent,
+  loginTeacher,
+  loginPrinciple,
+  getAllTeacher,
+  getAllStudent,
+  deleteStudent,
+} from "./globalAction";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   addingStudent: false,
   studentData: null,
-  currentUser: null,
+  delstudent: [],
   teacherData: null,
-  principleData:null,
-  allTeacher:[]
+
+  allTeacher: [],
+  allStudent: [],
 };
 
 const globalSlice = createSlice({
@@ -29,17 +38,23 @@ const globalSlice = createSlice({
     builder.addCase(loginStudent.fulfilled, (state, action) => {
       state.studentData = action.payload.data.student;
     });
+    builder.addCase(getAllStudent.fulfilled, (state, action) => {
+      state.allStudent = action.payload.data;
+    });
+    builder.addCase(deleteStudent.fulfilled, (state, action) => {
+      const deletedId = action.payload.id;
+      state.delstudent = state.delstudent.filter(
+        (student) => student._id !== deletedId
+      );
+    });
     builder.addCase(loginTeacher.fulfilled, (state, action) => {
       state.teacherData = action.payload;
     });
-     builder.addCase(loginPrinciple.rejected, (state, action) => {
-      state.principleData = null;
-    });
+
     builder.addCase(loginPrinciple.fulfilled, (state, action) => {
       state.principleData = action.payload;
     });
-     builder.addCase(getAllTeacher.fulfilled, (state, action) => {
-      console.log("data =>",action.payload)
+    builder.addCase(getAllTeacher.fulfilled, (state, action) => {
       state.allTeacher = action.payload.data;
     });
   },

@@ -132,3 +132,35 @@ export const loginData = async (req, res) => {
     });
   }
 };
+
+export const logoutData = async (req, res) => {
+  try {
+    // Get user ID from the request (assuming it's set by authentication middleware)
+    const userId = req.user?.id;
+
+    if (userId) {
+      // Update user's last logout time (optional)
+      await Princple.findByIdAndUpdate(userId, {
+        lastLogoutAt: new Date()
+      });
+    }
+
+    // Since JWT tokens are stateless, we can't invalidate them server-side
+    // The client should remove the token from their storage
+    res.status(200).json({
+      success: true,
+      message: "Logout successful",
+      data: {
+        message: "Please remove the token from client storage"
+      }
+    });
+
+  } catch (error) {
+    console.error("Logout error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Logout failed",
+      error: process.env.NODE_ENV === "development" ? error.message : undefined,
+    });
+  }
+};

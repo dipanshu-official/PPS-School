@@ -7,7 +7,6 @@ import {
 } from "../store/globalAction";
 import { useNavigate, Navigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { pricipalDataSelector } from "../store/globalSelctor";
 
 const LoginPage = () => {
   const [selectedRole, setSelectedRole] = useState("");
@@ -21,14 +20,7 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const principleData = useSelector(pricipalDataSelector);
 
-  useEffect(() => {
-    console.log("p =>",principleData)
-    if (principleData != null) {
-      navigate("/principal");
-    }
-  }, [principleData]);
 
   const roles = [
     {
@@ -121,37 +113,39 @@ const LoginPage = () => {
     setIsLoading(true);
 
     try {
-      // Prepare login data
       const loginData = {
         email: formData.email,
         password: formData.password,
         role: selectedRole,
       };
 
-      // Dispatch appropriate login action based on role
+      let response;
+
       switch (selectedRole) {
         case "principal":
-          await dispatch(loginPrinciple(loginData));
-          toast.success("login successfully principal");
+          response = await dispatch(loginPrinciple(loginData)).unwrap();
+          navigate("/principal");
+          toast.success("Login successful as Principal");
           break;
         case "teacher":
-          await dispatch(loginTeacher(loginData));
+          response = await dispatch(loginTeacher(loginData)).unwrap();
           navigate("/teacher");
-          toast.success("login successfully teacher");
-
+          toast.success("Login successful as Teacher");
           break;
         case "student":
-          await dispatch(loginStudent(loginData));
+          response = await dispatch(loginStudent(loginData)).unwrap();
           navigate("/student");
-          toast.success("login successfully student");
-
+          toast.success("Login successful as Student");
           break;
         default:
           throw new Error("Invalid role selected");
       }
     } catch (error) {
       console.error("Login failed:", error);
-      setError(error.message || "Login failed. Please try again.");
+      const errMsg =
+        error?.response?.data?.message || error?.message || "Login failed";
+      toast.error(errMsg);
+      setError(errMsg);
     } finally {
       setIsLoading(false);
     }
@@ -459,6 +453,9 @@ const LoginPage = () => {
         {/* Back to Home */}
         <div className="text-center mt-8 animate-fade-scale animation-delay-300">
           <button
+          onClick={() => {
+            navigate('/')
+          }}
             disabled={isLoading}
             className="text-blue-600 hover:text-blue-700 transition-colors duration-200 font-medium flex items-center space-x-2 mx-auto disabled:opacity-50 disabled:cursor-not-allowed"
           >

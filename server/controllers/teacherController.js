@@ -143,7 +143,7 @@ console.log("header value",req.headers.authorization)
       success: true,
       message: "Teachers retrieved successfully",
       data: teachers,
-      count: teachers.length,
+      count: teachers.length, 
     });
   } catch (error) {
     console.error("Error getting teachers:", error);

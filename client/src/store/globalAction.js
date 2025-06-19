@@ -4,8 +4,7 @@ import axiosInstance from "../api/axiosInstance";
 // Utility for setting auth headers
 const getAuthHeaders = () => {
   const token = localStorage.getItem("authToken");
-  return  `Bearer ${token}`
-
+  return `Bearer ${token}`;
 };
 
 export const addStudent = createAsyncThunk(
@@ -68,8 +67,8 @@ export const loginStudent = createAsyncThunk(
       });
 
       // Store token in localStorage if provided
-      if (response.data.token) {
-        localStorage.setItem("authToken", response.data.token);
+      if (response.data.data.token) {
+        localStorage.setItem("authToken", response.data.data.token);
       }
 
       return response.data;
@@ -77,6 +76,45 @@ export const loginStudent = createAsyncThunk(
       const errorMessage =
         error.response?.data?.message || error.message || "Login failed";
       return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+export const getAllStudent = createAsyncThunk(
+  "getAllStudent/allstudent",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get("/allstudent", {
+        headers: {
+          Authorization: getAuthHeaders(),
+        },
+      });
+      console.log("getAuthHeaders =>", getAuthHeaders());
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch teachers"
+      );
+    }
+  }
+);
+
+export const deleteStudent = createAsyncThunk(
+  "deleteStudent/deletestudent",
+  async (studentId, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.delete(`/deletestudent/${studentId}`, {
+        headers: {
+          Authorization: getAuthHeaders(),
+        },
+      });
+      console.log("getAuthHeaders =>", getAuthHeaders());
+      return response.data;
+    } catch (error) {
+      console.log(error)
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to delete"
+      );
     }
   }
 );
@@ -128,11 +166,11 @@ export const getAllTeacher = createAsyncThunk(
   "teacher/teachers",
   async (_, { rejectWithValue }) => {
     try {
-      console.log("getAuthHeaders =>",getAuthHeaders())
-      const response = await axiosInstance.get("/teachers" ,{
-        headers:{
-          Authorization:getAuthHeaders()
-        }
+      console.log("getAuthHeaders =>", getAuthHeaders());
+      const response = await axiosInstance.get("/teachers", {
+        headers: {
+          Authorization: getAuthHeaders(),
+        },
       });
       return response.data;
     } catch (error) {
@@ -142,7 +180,6 @@ export const getAllTeacher = createAsyncThunk(
     }
   }
 );
-
 
 // Login Student Thunk
 export const loginTeacher = createAsyncThunk(

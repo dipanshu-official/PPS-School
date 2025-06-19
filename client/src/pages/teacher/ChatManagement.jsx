@@ -1,6 +1,9 @@
 import { useState } from 'react';
+import {useSelector} from "react-redux"
+import { allstudentDataSelector } from '../../store/globalSelctor';
 
 const ChatManagement = () => {
+  const allStudent = useSelector(allstudentDataSelector)
   const [chatGroups, setChatGroups] = useState([
     {
       id: 1,
@@ -290,14 +293,14 @@ const ChatManagement = () => {
                           {grade}
                         </h4>
                         <div className="space-y-2 ml-2">
-                          {gradeStudents.map((student) => (
+                          {allStudent.map((student) => (
                             <label
-                              key={student.id}
+                              key={student._id}
                               className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 cursor-pointer"
                             >
                               <input
                                 type="checkbox"
-                                checked={newGroupData.selectedMembers.includes(student.id)}
+                                checked={newGroupData.selectedMembers.includes(student._id)}
                                 onChange={() => toggleMemberSelection(student.id)}
                                 className="rounded border-gray-300 text-green-600 focus:ring-green-500"
                               />
@@ -305,8 +308,8 @@ const ChatManagement = () => {
                                 <span className="text-white font-bold text-xs">{student.avatar}</span>
                               </div>
                               <div className="flex-1">
-                                <p className="text-sm font-medium text-gray-900">{student.name}</p>
-                                <p className="text-xs text-gray-600">{student.grade}</p>
+                                <p className="text-sm font-medium text-gray-900">{student.firstName}{student.lastName}</p>
+                                {/* <p className="text-xs text-gray-600">{student.grade}</p> */}
                               </div>
                             </label>
                           ))}

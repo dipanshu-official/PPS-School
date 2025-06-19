@@ -1,7 +1,14 @@
+import { useSelector } from "react-redux";
+import { allstudentDataSelector, allteacherDataSelector } from "../../store/globalSelctor";
+
 const Overview = ({ onNavigate }) => {
+  const allTeacher = useSelector(allteacherDataSelector)
+  const allStudent = useSelector(allstudentDataSelector)
+  const studentLength = allStudent.length
+  const teacherlength = allTeacher.length
   const stats = [
-    { title: 'Total Students', value: '1,247', change: '+12', icon: '👥' },
-    { title: 'Total Teachers', value: '89', change: '+3', icon: '👨‍🏫' },
+    { title: 'Total Students', value:studentLength, change: '+12', icon: '👥' },
+    { title: 'Total Teachers', value: teacherlength, change: '+3', icon: '👨‍🏫' },
     { title: 'Total Classes', value: '45', change: '0', icon: '🏫' },
     { title: 'Monthly Revenue', value: '$125,000', change: '+8%', icon: '💰' }
   ];
@@ -44,7 +51,7 @@ const Overview = ({ onNavigate }) => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">{stat.title}</p>
-                <p className="text-2xl font-bold text-gray-900 mt-1">{stat.value}</p>
+                <p className="text-2xl font-bold text-gray-900 mt-1">{length}</p>
                 <p className="text-sm text-green-600 mt-1">
                   {stat.change !== '0' && (stat.change.startsWith('+') ? '↗' : '↘')} {stat.change}
                 </p>

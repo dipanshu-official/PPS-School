@@ -1,4 +1,5 @@
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_SERVER_URL,
@@ -24,7 +25,8 @@ const successMessage = function (response) {
 const errorFunction = function (error) {
   const message = error?.response?.data?.message;
   if (message) {
-    console.log(message);
+    toast.error(message);
+    console.log(message)
   }
   throw error;
 };

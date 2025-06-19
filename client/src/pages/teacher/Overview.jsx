@@ -1,4 +1,10 @@
+import { useSelector } from "react-redux";
+import { allteacherDataSelector } from "../../store/globalSelctor";
+
+
 const Overview = ({ onNavigate }) => {
+    const allTeacher = useSelector(allteacherDataSelector);
+  
   const classStats = [
     { title: 'My Classes', value: '4', change: '0', icon: '📚' },
     { title: 'Total Students', value: '156', change: '+2', icon: '👥' },

@@ -1,6 +1,11 @@
 import { useState } from 'react';
+import  {useSelector} from "react-redux"
+import { allteacherDataSelector } from '../../store/globalSelctor';
 
 const ChatManagement = () => {
+ 
+  const allTeacher = useSelector(allteacherDataSelector)
+
   const [chatGroups, setChatGroups] = useState([
     {
       id: 1,
@@ -273,23 +278,23 @@ const ChatManagement = () => {
                   </label>
                   <div className="border border-gray-300 rounded-lg p-4 max-h-60 overflow-y-auto">
                     <div className="space-y-2">
-                      {teachers.map((teacher) => (
+                      {allTeacher.map((teacher) => (
                         <label
-                          key={teacher.id}
+                          key={teacher._id}
                           className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 cursor-pointer"
                         >
                           <input
                             type="checkbox"
-                            checked={newGroupData.selectedMembers.includes(teacher.id)}
-                            onChange={() => toggleMemberSelection(teacher.id)}
+                            checked={newGroupData.selectedMembers.includes(teacher._id)}
+                            onChange={() => toggleMemberSelection(teacher._id)}
                             className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
                           />
                           <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-full flex items-center justify-center">
                             <span className="text-white font-bold text-xs">{teacher.avatar}</span>
                           </div>
                           <div className="flex-1">
-                            <p className="text-sm font-medium text-gray-900">{teacher.name}</p>
-                            <p className="text-xs text-gray-600">{teacher.subject}</p>
+                            <p className="text-sm font-medium text-gray-900">{teacher.firstName}</p>
+                            {/* <p className="text-xs text-gray-600">{teacher.subject}</p> */}
                           </div>
                         </label>
                       ))}
