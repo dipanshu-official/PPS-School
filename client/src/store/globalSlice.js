@@ -6,6 +6,7 @@ import {
   getAllTeacher,
   getAllStudent,
   deleteStudent,
+  createChatGroup,
 } from "./globalAction";
 import { createSlice } from "@reduxjs/toolkit";
 
@@ -34,10 +35,6 @@ const globalSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-   
-
-    
-
     builder.addCase(loginStudent.fulfilled, (state, action) => {
       state.studentData = action.payload.data.student;
     });
@@ -59,6 +56,13 @@ const globalSlice = createSlice({
     });
     builder.addCase(getAllTeacher.fulfilled, (state, action) => {
       state.allTeacher = action.payload.data;
+    });
+
+    // chat section
+
+    builder.addCase(createChatGroup.fulfilled, (state, action) => {
+      state.chatData = action.payload.data;
+      console.log("chatData=>", chatData);
     });
   },
 });

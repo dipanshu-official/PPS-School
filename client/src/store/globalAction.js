@@ -7,10 +7,11 @@ const getAuthHeaders = () => {
   return `Bearer ${token}`;
 };
 
+//  student api section
 export const addStudent = createAsyncThunk(
   "student/addStudent",
   async (studentData, { rejectWithValue }) => {
-    console.log("student add call")
+    console.log("student add call");
     try {
       const {
         email,
@@ -54,7 +55,6 @@ export const addStudent = createAsyncThunk(
   }
 );
 
-// Login Student Thunk
 export const loginStudent = createAsyncThunk(
   "student/loginStudent",
   async (loginData, { rejectWithValue }) => {
@@ -104,15 +104,18 @@ export const deleteStudent = createAsyncThunk(
   "deleteStudent/deletestudent",
   async (studentId, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.delete(`/deletestudent/${studentId}`, {
-        headers: {
-          Authorization: getAuthHeaders(),
-        },
-      });
+      const response = await axiosInstance.delete(
+        `/deletestudent/${studentId}`,
+        {
+          headers: {
+            Authorization: getAuthHeaders(),
+          },
+        }
+      );
       console.log("getAuthHeaders =>", getAuthHeaders());
       return response.data;
     } catch (error) {
-      console.log(error)
+      console.log(error);
       return rejectWithValue(
         error.response?.data?.message || "Failed to delete"
       );
@@ -120,6 +123,7 @@ export const deleteStudent = createAsyncThunk(
   }
 );
 
+// Teacher api section
 export const addTeacher = createAsyncThunk(
   "teacher/register",
   async (teacherData, { rejectWithValue }) => {
@@ -182,7 +186,6 @@ export const getAllTeacher = createAsyncThunk(
   }
 );
 
-// Login Student Thunk
 export const loginTeacher = createAsyncThunk(
   "student/login",
   async (loginData, { rejectWithValue }) => {
@@ -209,6 +212,7 @@ export const loginTeacher = createAsyncThunk(
   }
 );
 
+// principal api section
 export const loginPrinciple = createAsyncThunk(
   "loginPrinciple/login-principle",
   async (principleData, { rejectWithValue }) => {
@@ -229,6 +233,49 @@ export const loginPrinciple = createAsyncThunk(
     } catch (error) {
       const errorMessage =
         error.response?.data?.message || error.message || "Login failed";
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+//create chatgroup message section
+
+export const createChatGroup = createAsyncThunk(
+  "createChatGroup/create",
+  async (chatData, { rejectWithValue }) => {
+    try {
+      const {
+        name,
+        description,
+        createdBy,
+        creatorUsername,
+        isPrivate,
+        maxMembers,
+        avatar,
+      } = chatData;
+
+      const response = await axiosInstance.post(
+        "/create",
+        {
+          name,
+          description,
+          createdBy,
+          creatorUsername,
+          isPrivate,
+          maxMembers,
+          avatar,
+        },
+        {
+          headers: getAuthHeaders(),
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.log("err =>", error);
+      const errorMessage =
+        error.response?.data?.message ||
+        error.message ||
+        "Failed to add student";
       return rejectWithValue(errorMessage);
     }
   }

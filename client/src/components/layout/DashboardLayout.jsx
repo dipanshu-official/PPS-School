@@ -121,7 +121,7 @@ const DashboardLayout = ({
       </nav>
 
       {/* Main Content */}
-      <main className="container-responsive py-6 sm:py-8">
+      <main className="container-responsive py-4">
         <div className="animate-fade-in">{children}</div>
       </main>
     </div>

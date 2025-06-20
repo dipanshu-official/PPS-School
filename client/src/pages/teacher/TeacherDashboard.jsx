@@ -2,7 +2,7 @@ import { useState } from 'react';
 import DashboardLayout from '../../components/layout/DashboardLayout';
 import Overview from './Overview';
 import StudentManagement from './StudentManagement';
-import ChatManagement from './ChatManagement';
+import TeacherChat from '../../components/TeacherChat';
 
 const TeacherDashboard = () => {
   const [currentView, setCurrentView] = useState('overview');
@@ -31,7 +31,7 @@ const TeacherDashboard = () => {
       case 'students':
         return <StudentManagement />;
       case 'chat':
-        return <ChatManagement />;
+        return <TeacherChat />;
       default:
         return (
           <div className="text-center py-12">

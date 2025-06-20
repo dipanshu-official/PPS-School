@@ -25,3 +25,4 @@ export const allteacherDataSelector = createSelector(
   [globlState],
   (state) => state.allTeacher
 );
+

@@ -1,28 +1,28 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import cors from 'cors';
-import helmet from 'helmet';
-import rateLimit from 'express-rate-limit';
-import dotenv from 'dotenv';
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
+import dotenv from "dotenv";
 import { createServer } from "http";
 import { Server } from "socket.io";
 
-// Import 
-import connectDB from './config/db.js'
-import studentRoutes from './routes/students.js';
-import teacherRoutes from './routes/teachers.js';
-import princpleRoutes from './routes/principle.js'
-import courseRoutes from './routes/courses.js';
-import attendanceRoutes from './routes/attendance.js';
-import gradeRoutes from './routes/grades.js';
-import dashboardRoutes from './routes/dashboard.js';
-import chatGroupRoutes from './routes/chatGroupRoute.js'
-import messageRoutes from './routes/messageRoute.js'
+// Import
+import connectDB from "./config/db.js";
+import studentRoutes from "./routes/students.js";
+import teacherRoutes from "./routes/teachers.js";
+import princpleRoutes from "./routes/principle.js";
+import courseRoutes from "./routes/courses.js";
+import attendanceRoutes from "./routes/attendance.js";
+import gradeRoutes from "./routes/grades.js";
+import dashboardRoutes from "./routes/dashboard.js";
+import chatGroupRoutes from "./routes/chatGroupRoute.js";
+import messageRoutes from "./routes/messageRoute.js";
 // Load environment variables
 dotenv.config();
 
 const app = express();
-const server = createServer(app)
+const server = createServer(app);
 const PORT = process.env.PORT || 5000;
 
 // Security middleware
@@ -32,38 +32,45 @@ app.use(helmet());
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // limit each IP to 100 requests per windowMs
-  message: 'Too many requests from this IP, please try again later.'
+  message: "Too many requests from this IP, please try again later.",
 });
 app.use(limiter);
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 // CORS configuration
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: "http://localhost:5173",
     methods: ["GET", "POST", "PUT", "DELETE"],
   },
 });
 
 // Body parsing middleware
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 // Connect to MongoDB
-connectDB()
+connectDB();
 
 // Routes
-app.use('/api', studentRoutes);
-app.use('/api', teacherRoutes);
-app.use('/api', princpleRoutes);
+app.use("/api", studentRoutes);
+app.use("/api", teacherRoutes);
+app.use("/api", princpleRoutes);
 
-app.use('/api/courses', courseRoutes);
-app.use('/api/attendance', attendanceRoutes);
-app.use('/api/grades', gradeRoutes);
-app.use('/api/dashboard', dashboardRoutes);
+app.use("/api/courses", courseRoutes);
+app.use("/api/attendance", attendanceRoutes);
+app.use("/api/grades", gradeRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 // Routes
-app.use("/api/groups",chatGroupRoutes );
-app.use("/api/messages",messageRoutes );
+app.use("/api/groups", chatGroupRoutes);
+app.use("/api/messages", messageRoutes);
 
 // Socket.IO Connection Handling
 const activeUsers = new Map();
@@ -241,30 +248,30 @@ io.on("connection", (socket) => {
 });
 
 // Health check endpoint
-app.get('/api/health', (req, res) => {
+app.get("/api/health", (req, res) => {
   res.status(200).json({
-    status: 'OK',
-    message: 'School Management System API is running',
-    timestamp: new Date().toISOString()
+    status: "OK",
+    message: "School Management System API is running",
+    timestamp: new Date().toISOString(),
   });
 });
 
 // 404 handler
-app.use('*', (req, res) => {
+app.use("*", (req, res) => {
   res.status(404).json({
     success: false,
-    message: 'API endpoint not found'
+    message: "API endpoint not found",
   });
 });
 
 // Global error handler
 app.use((error, req, res, next) => {
-  console.error('Error:', error);
-  
+  console.error("Error:", error);
+
   res.status(error.status || 500).json({
     success: false,
-    message: error.message || 'Internal server error',
-    ...(process.env.NODE_ENV === 'development' && { stack: error.stack })
+    message: error.message || "Internal server error",
+    ...(process.env.NODE_ENV === "development" && { stack: error.stack }),
   });
 });
 
