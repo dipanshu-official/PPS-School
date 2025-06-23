@@ -6,11 +6,12 @@ import {
   getAllTeacher,
   getAllStudent,
   deleteStudent,
-  createChatGroup,
+  getUserProfile,
 } from "./globalAction";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+  userprofile: [],
   studentData: null,
   delstudent: [],
   teacherData: null,
@@ -59,12 +60,12 @@ const globalSlice = createSlice({
     });
 
     // chat section
-
-    builder.addCase(createChatGroup.fulfilled, (state, action) => {
-      state.chatData = action.payload.data;
-      console.log("chatData=>", chatData);
+    builder.addCase(getUserProfile.fulfilled, (state, action) => {
+      console.log("getUserProfile =>", getUserProfile);
+      state.userprofile = action.payload.data;
     });
   },
+  
 });
 
 export const { clearError, clearStudents, setCurrentUser } =

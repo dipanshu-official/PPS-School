@@ -26,3 +26,8 @@ export const allteacherDataSelector = createSelector(
   (state) => state.allTeacher
 );
 
+export const userProfileDataSelector = createSelector(
+  [globlState],
+  (state) => state.userprofile
+);
+

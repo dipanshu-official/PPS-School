@@ -60,6 +60,7 @@ export const loginStudent = createAsyncThunk(
   async (loginData, { rejectWithValue }) => {
     try {
       const { email, password, role } = loginData;
+      console.log(email , password , role)
 
       const response = await axiosInstance.post("/loginstudent", {
         email,
@@ -70,6 +71,7 @@ export const loginStudent = createAsyncThunk(
       // Store token in localStorage if provided
       if (response.data.data.token) {
         localStorage.setItem("authToken", response.data.data.token);
+        localStorage.setItem("role",role)
       }
 
       return response.data;
@@ -85,6 +87,7 @@ export const getAllStudent = createAsyncThunk(
   "getAllStudent/allstudent",
   async (_, { rejectWithValue }) => {
     try {
+      console.log("getAllStudent called")
       const response = await axiosInstance.get("/allstudent", {
         headers: {
           Authorization: getAuthHeaders(),
@@ -137,6 +140,7 @@ export const addTeacher = createAsyncThunk(
         department,
         subjects,
         address,
+       
       } = teacherData;
 
       const response = await axiosInstance.post(
@@ -150,6 +154,7 @@ export const addTeacher = createAsyncThunk(
           department,
           subjects,
           address,
+          
         },
         {
           headers: getAuthHeaders(),
@@ -179,6 +184,7 @@ export const getAllTeacher = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
+      console.trace(error)
       return rejectWithValue(
         error.response?.data?.message || "Failed to fetch teachers"
       );
@@ -191,6 +197,7 @@ export const loginTeacher = createAsyncThunk(
   async (loginData, { rejectWithValue }) => {
     try {
       const { email, password, role } = loginData;
+      console.log('loginTeacher =>', email, password, role )
 
       const response = await axiosInstance.post("/login", {
         email,
@@ -201,6 +208,8 @@ export const loginTeacher = createAsyncThunk(
       // Store token in localStorage if provided
       if (response.data.data.token) {
         localStorage.setItem("authToken", response.data.data.token);
+        localStorage.setItem("role",role)
+
       }
 
       return response.data;
@@ -218,6 +227,7 @@ export const loginPrinciple = createAsyncThunk(
   async (principleData, { rejectWithValue }) => {
     try {
       const { email, password, role } = principleData;
+      console.log("loginPrincipal =>",email, password, role )
 
       const response = await axiosInstance.post("/login-principle", {
         email,
@@ -227,6 +237,7 @@ export const loginPrinciple = createAsyncThunk(
 
       if (response.data.data.token) {
         localStorage.setItem("authToken", response.data.data.token);
+        localStorage.setItem("role" ,role)
       }
 
       return response.data;
@@ -240,43 +251,24 @@ export const loginPrinciple = createAsyncThunk(
 
 //create chatgroup message section
 
-export const createChatGroup = createAsyncThunk(
-  "createChatGroup/create",
-  async (chatData, { rejectWithValue }) => {
+export const getUserProfile = createAsyncThunk(
+  "getUserProfile/teachers",
+  async (_, { rejectWithValue }) => {
     try {
-      const {
-        name,
-        description,
-        createdBy,
-        creatorUsername,
-        isPrivate,
-        maxMembers,
-        avatar,
-      } = chatData;
-
-      const response = await axiosInstance.post(
-        "/create",
-        {
-          name,
-          description,
-          createdBy,
-          creatorUsername,
-          isPrivate,
-          maxMembers,
-          avatar,
+      
+      const response = await axiosInstance.get("/user/profile", {
+        headers: {
+          Authorization: getAuthHeaders(),
         },
-        {
-          headers: getAuthHeaders(),
-        }
-      );
+      });
       return response.data;
     } catch (error) {
-      console.log("err =>", error);
-      const errorMessage =
-        error.response?.data?.message ||
-        error.message ||
-        "Failed to add student";
-      return rejectWithValue(errorMessage);
+      console.trace(error)
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch teachers"
+      );
     }
   }
 );
+
+

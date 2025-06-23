@@ -1,12 +1,7 @@
 import Princple from "../models/Principal.js";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import { generateToken } from "../utils.js";
 
-const generateToken = (userId , role) => {
-  return jwt.sign({ id: userId ,role:'principal' }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRE,
-  });
-};
 
 export const signupData = async (req, res) => {
   try {
@@ -40,13 +35,13 @@ export const signupData = async (req, res) => {
       lastName,
       email,
       password: hashedPassword,
-      role: role || "principle", // Default role
+      role: role || "principal", // Default role
     });
 
     const savedUser = await newUser.save();
 
     // Generate token
-    const token = generateToken(savedUser._id);
+    const token = generateToken(savedUser._id,'principal');
 
     res.status(201).json({
       success: true,
@@ -102,7 +97,7 @@ export const loginData = async (req, res) => {
     }
 
     // Generate token
-    const token = generateToken(user._id);
+    const token = generateToken(user._id,'principal');
 
     // Update last login (optional)
     user.lastLoginAt = new Date();

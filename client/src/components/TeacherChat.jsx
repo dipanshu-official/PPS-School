@@ -211,12 +211,7 @@ const TeacherChat = () => {
       />
 
       <div className="flex-1 flex flex-col">
-        <ChatHeader
-          group={currentGroup}
-          onSettingsClick={() => setShowGroupSettings(true)}
-          showSearch={true}
-          theme="green"
-        />
+       
 
         <MessageList messages={currentMessages} theme="green" />
 

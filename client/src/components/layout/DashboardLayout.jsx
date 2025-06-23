@@ -1,7 +1,12 @@
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import {toast} from "react-hot-toast"
+import { toast } from "react-hot-toast";
+import { useState, useEffect, useRef } from "react";
+import { userProfileDataSelector } from "../../store/globalSelctor";
+import { getUserProfile } from "../../store/globalAction";
+import { io } from "socket.io-client";
 
+const socket = io("http://localhost:5000");
 const DashboardLayout = ({
   title,
   userInfo,
@@ -10,14 +15,52 @@ const DashboardLayout = ({
   onNavigate,
   children,
 }) => {
-
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const userProfile = useSelector(userProfileDataSelector);
+  const [user, setUser] = useState(null);
+  const socketRef = useRef(null);
+
+  // Fetch user profile
+  useEffect(() => {
+    dispatch(getUserProfile());
+  }, [dispatch]);
+
+  // Update user state when userProfile changes
+  useEffect(() => {
+    if (userProfile && userProfile._id) {
+      setUser(userProfile);
+    }
+  }, [userProfile]);
+
+  // Initialize socket only after user is set
+  useEffect(() => {
+    if (user && user._id) {
+      socketRef.current = socket;
+console.log("register")
+      socket.emit("register", user._id);
+
+      socket.emit("send_message", {
+        senderId: user._id,
+        recipientId: "68531aafde77e688d6669953",
+        content: "Hello!",
+      });
+
+      socket.on("receive_message", (data) => {
+        console.log("Message from", data.senderId, ":", data.content);
+      });
+
+      // return () => {
+      //   socket.disconnect();
+      // };
+    }
+  }, [user, socket]);
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
-    localStorage.clear()
-    navigate('/login')
-    toast.success("logout successfully")
+    localStorage.clear();
+    navigate("/login");
+    toast.success("Logged out successfully");
   };
 
   const getColorClasses = (color) => {

@@ -1,6 +1,7 @@
 import Student from "../models/Student.js";
 import jwt from "jsonwebtoken";
 import Teacher from "../models/Teacher.js";
+import { generateToken } from "../utils.js";
 
 // Add a new student
 export const addStudent = async (req, res) => {
@@ -105,15 +106,7 @@ export const loginStudent = async (req, res) => {
     }
 
     // Generate JWT token
-    const token = jwt.sign(
-      {
-        id: student._id,
-        email: student.email,
-       
-      },
-      process.env.JWT_SECRET || "your-secret-key", // Use environment variable
-      { expiresIn: "7d" } // Token expires in 7 days
-    );
+    const token = generateToken(student._id,'student') 
 
     // Prepare student data for response (exclude password)
     const studentData = {
@@ -122,6 +115,7 @@ export const loginStudent = async (req, res) => {
       lastName: student.lastName,
       email: student.email,
       phone: student.phone,
+      
      
     };
 
@@ -131,6 +125,7 @@ export const loginStudent = async (req, res) => {
       data: {
         student: studentData,
         token: token,
+        role:role
       },
     });
   } catch (error) {
@@ -145,7 +140,7 @@ export const loginStudent = async (req, res) => {
 
 export const getAllStudents = async (req, res) => {
   try {
-    console.log(req.shiva)
+    console.log(req.user)
     const students = await Student.find({}).select("-password")
     res.status(200).json({
       success:true,

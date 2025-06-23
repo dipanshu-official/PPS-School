@@ -21,7 +21,7 @@ const MembersSettings = ({
 
   useEffect(() => {
     dispatch(getAllTeacher) 
-  })
+  },[])
 
   const [searchTerm, setSearchTerm] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);

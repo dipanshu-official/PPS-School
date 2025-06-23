@@ -1,6 +1,7 @@
 import Teacher from "../models/Teacher.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { generateToken } from "../utils.js";
 
 // Add Teacher
 export const addTeacher = async (req, res) => {
@@ -96,16 +97,8 @@ export const loginTeacher = async (req, res) => {
       });
     }
 
-    // Generate JWT token
-    const token = jwt.sign(
-      {
-        teacherId: teacher._id,
-        email: teacher.email,
-        role: "teacher",
-      },
-      process.env.JWT_SECRET || "your_jwt_secret_key",
-      { expiresIn: "7d" }
-    );
+    
+     const token = generateToken(teacher._id,'teacher') 
 
     // Remove password from response
     
@@ -132,13 +125,11 @@ export const loginTeacher = async (req, res) => {
 // Get All Teachers
 export const getAllTeachers = async (req, res) => {
   try {
-    console.log("custom req",req.shiva)
-    if (req.shiva.role != "principal") {
+    if (req.user.role != "principal") {
       res.status(401).json("you are not a pricipal");
       return
     }
     const teachers = await Teacher.find({}).select("-password");
-console.log("header value",req.headers.authorization)
     res.status(200).json({
       success: true,
       message: "Teachers retrieved successfully",

@@ -6,57 +6,7 @@ import { allteacherDataSelector } from "../../store/globalSelctor";
 import { getAllTeacher } from "../../store/globalAction";
 
 const TeacherManagement = () => {
-  const [teachers, setTeachers] = useState([
-    {
-      id: 1,
-      firstName: "Emily",
-      lastName: "Johnson",
-      email: "emily.johnson@plasmapathways.edu",
-      password: "teacher123",
-      subject: "Mathematics",
-    },
-    {
-      id: 2,
-      firstName: "Michael",
-      lastName: "Davis",
-      email: "michael.davis@plasmapathways.edu",
-      password: "teacher456",
-      subject: "English Literature",
-    },
-    {
-      id: 3,
-      firstName: "Sarah",
-      lastName: "Smith",
-      email: "sarah.smith@plasmapathways.edu",
-      password: "teacher789",
-      subject: "Science",
-    },
-    {
-      id: 4,
-      firstName: "David",
-      lastName: "Wilson",
-      email: "david.wilson@plasmapathways.edu",
-      password: "teacher101",
-      subject: "History",
-    },
-    {
-      id: 5,
-      firstName: "Lisa",
-      lastName: "Garcia",
-      email: "lisa.garcia@plasmapathways.edu",
-      password: "teacher202",
-      subject: "Art",
-    },
-    {
-      id: 6,
-      firstName: "Robert",
-      lastName: "Brown",
-      email: "robert.brown@plasmapathways.edu",
-      password: "teacher303",
-      subject: "Physical Education",
-    },
-  ]);
-
+  
   const dispatch = useDispatch();
   const allTeacher = useSelector(allteacherDataSelector);
   console.log("allTeacher =>", allTeacher);

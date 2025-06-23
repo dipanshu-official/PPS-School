@@ -4,6 +4,14 @@ import jwt from 'jsonwebtoken';
 export const authenticate = async (req, res, next) => {
   try {
     const token = req.header('Authorization')?.replace('Bearer ', '');
+    const role = req.body
+    
+    if(!role){
+      return res.status(401).json({
+        success: false,
+        message: 'Access denied. No role provided.'
+      });
+    }
     
     if (!token) {
       return res.status(401).json({
@@ -14,7 +22,7 @@ export const authenticate = async (req, res, next) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
-    req.shiva = decoded;
+    req.user = decoded;
     next();
   } catch (error) {
     if (error.name === 'JsonWebTokenError') {
