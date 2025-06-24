@@ -42,7 +42,7 @@ const ChatSidebar = ({
   };
 
   const dispatch = useDispatch();
-  const [showMessages, setShowMessages] = useState(false);
+  
   const role = localStorage.getItem("role");
   const allteacher = useSelector(allteacherDataSelector);
   const allstudent = useSelector(allstudentDataSelector);

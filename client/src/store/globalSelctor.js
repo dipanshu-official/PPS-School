@@ -30,4 +30,9 @@ export const userProfileDataSelector = createSelector(
   [globlState],
   (state) => state.userprofile
 );
+export const currentStudentDataSelector = createSelector(
+  [globlState],
+  (state) => state.currentstudent
+);
+
 

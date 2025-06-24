@@ -1,7 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Avatar from '../common/Avatar';
 import { principalGroups, groupMembers, sampleMessages, allStaffMembers } from '../../data/MocData';
+import { useSelector , useDispatch } from 'react-redux';
+import { userProfileDataSelector } from '../../store/globalSelctor';
+import { getUserProfile } from '../../store/globalAction';
 const MessageList = ({ messages, theme = 'blue' }) => {
+  const dispatch = useDispatch()
+  const user = useSelector(userProfileDataSelector)
+  console.log("user => ",user)
+
+
+  useEffect(() => {
+    getUserProfile()
+  },[])
+
   const themeClasses = {
     blue: 'bg-gradient-to-r from-principal-500 to-principal-600',
     green: 'bg-gradient-to-r from-teacher-500 to-teacher-600'
@@ -33,7 +45,7 @@ const MessageList = ({ messages, theme = 'blue' }) => {
   };
 
   return (
-    <div className="flex-1 overflow-y-auto  p-4 lg:p-6 space-y-6 bg-gradient-to-b from-gray-25 to-gray-50">
+    <div className="flex-1 overflow-y-auto p-4 space-y-6 bg-gradient-to-b from-gray-25 to-gray-50">
       {currentMessages.map((message, index) => (
         <div
           key={message.id}

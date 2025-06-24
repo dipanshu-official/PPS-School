@@ -12,11 +12,6 @@ import connectDB from "./config/db.js";
 import studentRoutes from "./routes/students.js";
 import teacherRoutes from "./routes/teachers.js";
 import princpleRoutes from "./routes/principle.js";
-import courseRoutes from "./routes/courses.js";
-import attendanceRoutes from "./routes/attendance.js";
-import gradeRoutes from "./routes/grades.js";
-import dashboardRoutes from "./routes/dashboard.js";
-import chatGroupRoutes from "./routes/chatGroupRoute.js";
 import messageRoutes from "./routes/messageRoute.js";
 import profileRoutes from "./routes/profile.js";
 // Load environment variables
@@ -39,7 +34,7 @@ app.use(limiter);
 
 app.use(
   cors({
-    origin: "http://localhost:5173"
+    origin: "http://localhost:5173",
   })
 );
 
@@ -62,26 +57,20 @@ connectDB();
 app.use("/api", studentRoutes);
 app.use("/api", teacherRoutes);
 app.use("/api", princpleRoutes);
-app.use("/api/user", profileRoutes)
-app.use("/api/courses", courseRoutes);
-app.use("/api/attendance", attendanceRoutes);
-app.use("/api/grades", gradeRoutes);
-app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/user", profileRoutes);
+
 
 // Routes
-app.use("/api/groups", chatGroupRoutes);
 app.use("/api/messages", messageRoutes);
-
-
 
 const userSockets = new Map(); // userId => socket.id
 
 io.on("connection", (socket) => {
-  console.log("User connected:",userSockets, socket.id);
+  console.log("User connected:", userSockets, socket.id);
 
   // Register user with their userId
   socket.on("register", (userId) => {
-    console.log("register event triggered")
+    console.log("register event triggered");
     userSockets.set(userId, socket.id);
     console.log(`User ${userId} registered with socket ${socket.id}`);
   });
@@ -89,7 +78,8 @@ io.on("connection", (socket) => {
   // Handle sending a private message
   socket.on("send_message", ({ senderId, recipientId, content }) => {
     const recipientSocketId = userSockets.get(recipientId);
-
+    console.log("message content", content);
+    console.log("re", recipientSocketId);
     if (recipientSocketId) {
       io.to(recipientSocketId).emit("receive_message", {
         senderId,
@@ -112,7 +102,6 @@ io.on("connection", (socket) => {
     }
   });
 });
-
 
 app.get("/api/health", (req, res) => {
   res.status(200).json({

@@ -24,7 +24,7 @@ const GroupFormModal = ({
   );
   const dispatch = useDispatch();
   const allTeacher = useSelector(allteacherDataSelector);
-  console.log("allTeacher =>", allTeacher);
+  
  
   useEffect(() => {
     dispatch(getAllTeacher())
@@ -152,7 +152,7 @@ const GroupFormModal = ({
               <div className="flex flex-wrap gap-3">
                 {allTeacher.map((member) => (
                   <span
-                    key={member.id}
+                    key={member._id}
                     className={`inline-flex items-center px-3 py-2 rounded-xl text-sm font-medium ${colors.badge} shadow-soft hover-lift`}
                   >
                     <Avatar name={member.name} size="sm" className="mr-2" />

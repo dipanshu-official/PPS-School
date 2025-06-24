@@ -126,6 +126,25 @@ export const deleteStudent = createAsyncThunk(
   }
 );
 
+export const getCurrentStudent = createAsyncThunk(
+  "getCurrentStudent/currentstudent",
+  async (studentId, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(`/currentstudent/${studentId}`, {
+        headers: {
+          Authorization: getAuthHeaders(),
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.trace(error)
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch teachers"
+      );
+    }
+  }
+);
+
 // Teacher api section
 export const addTeacher = createAsyncThunk(
   "teacher/register",
@@ -176,7 +195,6 @@ export const getAllTeacher = createAsyncThunk(
   "teacher/teachers",
   async (_, { rejectWithValue }) => {
     try {
-      console.log("getAuthHeaders =>", getAuthHeaders());
       const response = await axiosInstance.get("/teachers", {
         headers: {
           Authorization: getAuthHeaders(),

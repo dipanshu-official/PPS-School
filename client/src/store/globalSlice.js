@@ -7,12 +7,14 @@ import {
   getAllStudent,
   deleteStudent,
   getUserProfile,
+  getCurrentStudent,
 } from "./globalAction";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   userprofile: [],
   studentData: null,
+  currentstudent: [],
   delstudent: [],
   teacherData: null,
 
@@ -42,6 +44,9 @@ const globalSlice = createSlice({
     builder.addCase(getAllStudent.fulfilled, (state, action) => {
       state.allStudent = action.payload.data;
     });
+    builder.addCase(getCurrentStudent.fulfilled, (state, action) => {
+      state.currentstudent = action.payload;
+    });
     builder.addCase(deleteStudent.fulfilled, (state, action) => {
       const deletedId = action.payload.id;
       state.delstudent = state.delstudent.filter(
@@ -61,11 +66,9 @@ const globalSlice = createSlice({
 
     // chat section
     builder.addCase(getUserProfile.fulfilled, (state, action) => {
-      console.log("getUserProfile =>", getUserProfile);
       state.userprofile = action.payload.data;
     });
   },
-  
 });
 
 export const { clearError, clearStudents, setCurrentUser } =

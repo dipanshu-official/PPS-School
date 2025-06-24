@@ -75,7 +75,7 @@ export const addStudent = async (req, res) => {
 };
 export const loginStudent = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password , role } = req.body;
 
     // Validate required fields
     if (!email || !password ) {
@@ -115,6 +115,7 @@ export const loginStudent = async (req, res) => {
       lastName: student.lastName,
       email: student.email,
       phone: student.phone,
+      role:student.role
       
      
     };
@@ -236,6 +237,7 @@ export const editStudent = async (req, res) => {
 export const getCurrentStudent = async (req, res) => {
   try {
     const { id } = req.params;
+    console.log(req.params)
 
     // Validate MongoDB ObjectId
     if (!id.match(/^[0-9a-fA-F]{24}$/)) {
@@ -259,6 +261,7 @@ export const getCurrentStudent = async (req, res) => {
       data: student,
     });
   } catch (error) {
+    console.log(error)
     res.status(500).json({
       success: false,
       message: "Failed to fetch student",

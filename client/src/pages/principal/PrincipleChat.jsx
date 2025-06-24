@@ -18,6 +18,7 @@ import {
   sampleMessages,
   allStaffMembers,
 } from "../../data/MocData";
+import { sendMessageFn } from "../../utils/utils";
 
 const PrincipalChat = () => {
   const [newMessage, setNewMessage] = useState("");
@@ -141,6 +142,7 @@ const PrincipalChat = () => {
   };
 
   const handleSendMessage = () => {
+    sendMessageFn(newMessage)
     if (newMessage.trim()) {
       console.log("Sending message:", newMessage);
       setNewMessage("");
@@ -158,61 +160,7 @@ const PrincipalChat = () => {
     return group.createdBy === "Principal";
   };
 
-  if (showGroupSettings && currentGroup) {
-    return (
-      <div className="flex h-screen bg-gray-50">
-        <SettingsSidebar
-          activeTab={activeSettingsTab}
-          onTabChange={setActiveSettingsTab}
-          onBackToChat={() => setShowGroupSettings(false)}
-          groupName={currentGroup.name}
-          theme="blue"
-        />
-
-        <div className="flex-1 overflow-y-auto">
-          <div className="p-8">
-            {activeSettingsTab === "general" && (
-              <GeneralSettings
-                group={currentGroup}
-                onUpdate={handleGroupSettingsUpdate}
-                canModify={canModifyGroup(currentGroup)}
-                theme="blue"
-              />
-            )}
-
-            {activeSettingsTab === "members" && (
-              <MembersSettings
-                members={groupMembersData}
-                canModify={canModifyGroup(currentGroup)}
-                onAddMember={handleAddMember}
-                onRemoveMember={handleRemoveMember}
-                availableMembers={allStaffMembers}
-                groupId={selectedGroup}
-                theme="blue"
-              />
-            )}
-
-            {activeSettingsTab === "privacy" && (
-              <PrivacySettings
-                group={currentGroup}
-                onUpdate={handleGroupSettingsUpdate}
-                canModify={canModifyGroup(currentGroup)}
-                theme="blue"
-              />
-            )}
-
-            {activeSettingsTab === "notifications" && (
-              <NotificationSettings
-                group={currentGroup}
-                onUpdate={handleGroupSettingsUpdate}
-                theme="blue"
-              />
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  }
+ 
 
   return (
     <div className="flex h-screen bg-gray-50">

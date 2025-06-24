@@ -1,12 +1,15 @@
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useState, useEffect, useRef } from "react";
-import { userProfileDataSelector } from "../../store/globalSelctor";
-import { getUserProfile } from "../../store/globalAction";
+import {
+  currentStudentDataSelector,
+  userProfileDataSelector,
+} from "../../store/globalSelctor";
+import { getCurrentStudent, getUserProfile } from "../../store/globalAction";
 import { io } from "socket.io-client";
+import { sendMessageFn, socket } from "../../utils/utils";
 
-const socket = io("http://localhost:5000");
 const DashboardLayout = ({
   title,
   userInfo,
@@ -18,13 +21,20 @@ const DashboardLayout = ({
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userProfile = useSelector(userProfileDataSelector);
+  const currentStudent = useSelector(currentStudentDataSelector);
   const [user, setUser] = useState(null);
   const socketRef = useRef(null);
+  const {studentId} = useParams()
 
   // Fetch user profile
   useEffect(() => {
-    dispatch(getUserProfile());
+    if (studentId) {
+      dispatch(getUserProfile());
+      dispatch(getCurrentStudent(studentId));
+    }
   }, [dispatch]);
+
+  console.log("currentStudent=>", currentStudent);
 
   // Update user state when userProfile changes
   useEffect(() => {
@@ -37,22 +47,16 @@ const DashboardLayout = ({
   useEffect(() => {
     if (user && user._id) {
       socketRef.current = socket;
-console.log("register")
+      console.log("register");
       socket.emit("register", user._id);
-
-      socket.emit("send_message", {
-        senderId: user._id,
-        recipientId: "68531aafde77e688d6669953",
-        content: "Hello!",
-      });
 
       socket.on("receive_message", (data) => {
         console.log("Message from", data.senderId, ":", data.content);
       });
 
-      // return () => {
-      //   socket.disconnect();
-      // };
+      return () => {
+        socket.disconnect();
+      };
     }
   }, [user, socket]);
 

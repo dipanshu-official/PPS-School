@@ -229,7 +229,7 @@ const TeacherChat = () => {
         onClose={createModal.closeModal}
         onSubmit={handleCreateGroup}
         formData={newGroupForm}
-        setFormData={setNewGroupForm}
+        setFormData={setNewGroupForm}     
         title="Create New Group"
         submitText="Create Group"
         availableMembers={availableMembers}
