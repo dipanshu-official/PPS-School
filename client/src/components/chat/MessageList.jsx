@@ -21,31 +21,9 @@ const MessageList = ({ messages, theme = 'blue' }) => {
 
   const currentMessages = sampleMessages['all-teachers'] || [];
 
-  const MessageStatus = ({ isOwn, isDelivered = true, isRead = false }) => {
-    if (!isOwn) return null;
-    
-    return (
-      <div className="message-status">
-        {isRead ? (
-          <svg className="w-4 h-4 double-tick" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M18 7l-1.41-1.41-6.34 6.34 1.41 1.41L18 7zm4.24-1.41L11.66 16.17 7.48 12l-1.41 1.41L11.66 19l12-12-1.42-1.41zM.41 13.41L6 19l1.41-1.41L1.83 12 .41 13.41z"/>
-          </svg>
-        ) : isDelivered ? (
-          <svg className="w-4 h-4 single-tick" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-            <path d="M19.59 7L12 14.59 6.41 9 5 10.41l7 7 9-9z"/>
-          </svg>
-        ) : (
-          <svg className="w-4 h-4 single-tick" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-          </svg>
-        )}
-      </div>
-    );
-  };
 
   return (
-    <div className="flex-1 overflow-y-auto p-4 space-y-6 bg-gradient-to-b from-gray-25 to-gray-50">
+    <div className=" overflow-y-auto p-4 space-y-6 bg-gradient-to-b from-gray-25 to-gray-50">
       {currentMessages.map((message, index) => (
         <div
           key={message.id}

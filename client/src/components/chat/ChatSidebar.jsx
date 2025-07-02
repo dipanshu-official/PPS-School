@@ -6,7 +6,6 @@ import {
   allteacherDataSelector,
 } from "../../store/globalSelctor";
 import { getAllStudent, getAllTeacher } from "../../store/globalAction";
-import MessageList from "./MessageList";
 import { useState } from "react";
 
 const ChatSidebar = ({
@@ -14,7 +13,6 @@ const ChatSidebar = ({
   subtitle,
   avatar,
   selectedGroup,
-  onGroupSelect,
   onEditGroup,
   onDeleteGroup,
   canModifyGroup,
@@ -97,15 +95,16 @@ const ChatSidebar = ({
               onClick={() => {
                 showMessageBar(true);
               }}
+
+             
                 key={group._id}
                 className={`group relative p-2 lg:p-2 rounded-xl transition-all duration-200 hover-lift ${
                   selectedGroup === group._id
-                    ? `${colors.selected} border-2`
-                    : "hover:bg-gray-50 border-2 border-transparent"
+                    ? `${colors.selected} border-2 bg-blue-500`
+                    : "hover:bg-gray-50 border-2 border-transparent "
                 }`}
               >
                 <button
-                  onClick={() => onGroupSelect(group._id)}
                   className="w-full text-left"
                 >
                   <div className="flex items-center justify-between mb-2">

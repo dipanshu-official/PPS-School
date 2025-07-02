@@ -127,72 +127,11 @@ const TeacherChat = () => {
     }
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSendMessage();
-    }
-  };
+ 
 
-  const canModifyGroup = (group) => {
-    return group.createdBy === 'You' || group.id !== 'principal-announcements';
-  };
+ 
 
-  if (showGroupSettings && currentGroup) {
-    return (
-      <div className="flex h-screen bg-gray-50">
-        <SettingsSidebar
-          activeTab={activeSettingsTab}
-          onTabChange={setActiveSettingsTab}
-          onBackToChat={() => setShowGroupSettings(false)}
-          groupName={currentGroup.name}
-          theme="green"
-        />
-
-        <div className="flex-1 overflow-y-auto">
-          <div className="p-8">
-            {activeSettingsTab === 'general' && (
-              <GeneralSettings
-                group={currentGroup}
-                onUpdate={handleGroupSettingsUpdate}
-                canModify={canModifyGroup(currentGroup)}
-                theme="green"
-              />
-            )}
-
-            {activeSettingsTab === 'members' && (
-              <MembersSettings
-                members={groupMembersData}
-                canModify={canModifyGroup(currentGroup)}
-                onAddMember={handleAddMember}
-                onRemoveMember={handleRemoveMember}
-                availableMembers={availableMembers}
-                groupId={selectedGroup}
-                theme="green"
-              />
-            )}
-
-            {activeSettingsTab === 'privacy' && (
-              <PrivacySettings
-                group={currentGroup}
-                onUpdate={handleGroupSettingsUpdate}
-                canModify={canModifyGroup(currentGroup)}
-                theme="green"
-              />
-            )}
-
-            {activeSettingsTab === 'notifications' && (
-              <NotificationSettings
-                group={currentGroup}
-                onUpdate={handleGroupSettingsUpdate}
-                theme="green"
-              />
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  }
+ 
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -202,7 +141,6 @@ const TeacherChat = () => {
         avatar="T"
         groups={groups}
         selectedGroup={selectedGroup}
-        onGroupSelect={setSelectedGroup}
         onCreateGroup={createModal.openModal}
         onEditGroup={openEditModal}
         onDeleteGroup={deleteModal.openModal}
