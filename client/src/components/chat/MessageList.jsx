@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import Avatar from '../common/Avatar';
-import { principalGroups, groupMembers, sampleMessages, allStaffMembers } from '../../data/MocData';
 import { useSelector , useDispatch } from 'react-redux';
 import { userProfileDataSelector } from '../../store/globalSelctor';
 import { getUserProfile } from '../../store/globalAction';

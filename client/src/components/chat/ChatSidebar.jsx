@@ -7,6 +7,8 @@ import {
 } from "../../store/globalSelctor";
 import { getAllStudent, getAllTeacher } from "../../store/globalAction";
 import { useState } from "react";
+import { io } from "socket.io-client";
+import { setSocket } from "../../store/socketSlice";
 
 const ChatSidebar = ({
   title,
@@ -15,10 +17,8 @@ const ChatSidebar = ({
   selectedGroup,
   onEditGroup,
   onDeleteGroup,
-  canModifyGroup,
   theme = "blue",
-  showMessageBar
-
+  showMessageBar,
 }) => {
   const themeClasses = {
     blue: {
@@ -40,10 +40,27 @@ const ChatSidebar = ({
   };
 
   const dispatch = useDispatch();
-  
+
   const role = localStorage.getItem("role");
   const allteacher = useSelector(allteacherDataSelector);
   const allstudent = useSelector(allstudentDataSelector);
+  const { socket } = useSelector((store) => store.socket);
+
+  useEffect(() => {
+    if (allteacher) {
+      const socketio = io("http://localhost:5000", {
+        query: {
+          userId: allteacher._id,
+        },
+      });
+      dispatch(setSocket(socketio));
+    } else {
+      if (socket) {
+        socket.close();
+        dispatch(setSocket(null));
+      }
+    }
+  }, []);
 
   // Fetch data based on role
   useEffect(() => {
@@ -92,11 +109,9 @@ const ChatSidebar = ({
           <div className="space-y-1">
             {visibleGroups.map((group) => (
               <div
-              onClick={() => {
-                showMessageBar(true);
-              }}
-
-             
+                onClick={() => {
+                  showMessageBar(true);
+                }}
                 key={group._id}
                 className={`group relative p-2 lg:p-2 rounded-xl transition-all duration-200 hover-lift ${
                   selectedGroup === group._id
@@ -104,9 +119,7 @@ const ChatSidebar = ({
                     : "hover:bg-gray-50 border-2 border-transparent "
                 }`}
               >
-                <button
-                  className="w-full text-left"
-                >
+                <button className="w-full text-left">
                   <div className="flex items-center justify-between mb-2">
                     <span className="font-semibold text-gray-900 text-base lg:text-lg">
                       {group.firstName}
@@ -125,7 +138,7 @@ const ChatSidebar = ({
                   </p>
                 </button>
 
-                {canModifyGroup(group) && (
+                {/* {canModifyGroup(group) && (
                   <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                     <div className="flex items-center space-x-1 bg-white rounded-lg shadow-medium p-1">
                       <button
@@ -150,7 +163,7 @@ const ChatSidebar = ({
                       </button>
                     </div>
                   </div>
-                )}
+                )} */}
               </div>
             ))}
           </div>

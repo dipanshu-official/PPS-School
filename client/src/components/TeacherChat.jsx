@@ -10,15 +10,12 @@ import GeneralSettings from './settings/GenralSetting';
 import MembersSettings from './settings/MembersSetting';
 import PrivacySettings from './settings/PravacySetting';
 import NotificationSettings from './settings/NotificationSetting';
-import { useGroupManagement } from '../hooks/useGroupManagement';
 import { useModal } from '../hooks/useModal';
-import { teacherGroups, groupMembers, sampleMessages, allStaffMembers } from '../data/MocData';
 
 const TeacherChat = () => {
   console.log(teacherGroups)
   const [newMessage, setNewMessage] = useState('');
-  const [showGroupSettings, setShowGroupSettings] = useState(false);
-  const [activeSettingsTab, setActiveSettingsTab] = useState('general');
+
   const [newGroupForm, setNewGroupForm] = useState({ name: '', description: '', members: [] });
   const [groupMembersData, setGroupMembersData] = useState(groupMembers);
 
@@ -77,48 +74,9 @@ const TeacherChat = () => {
     editModal.openModal(group);
   };
 
-  const handleGroupSettingsUpdate = (field, value) => {
-    updateGroup(selectedGroup, { [field]: value });
-  };
+ 
 
-  const handleAddMember = (newMembers, groupId) => {
-    // Add new members to the group members list
-    const membersWithJoinDate = newMembers.map(member => ({
-      ...member,
-      joinedAt: new Date().toLocaleDateString('en-US', { 
-        year: 'numeric', 
-        month: 'short', 
-        day: 'numeric' 
-      })
-    }));
-    
-    setGroupMembersData(prev => [...prev, ...membersWithJoinDate]);
-    
-    // Update group member count
-    const currentGroup = getGroupById(groupId);
-    if (currentGroup) {
-      updateGroup(groupId, { 
-        members: currentGroup.members + newMembers.length 
-      });
-    }
-    
-    console.log(`Added ${newMembers.length} members to group ${groupId}:`, newMembers);
-  };
 
-  const handleRemoveMember = (memberId, groupId) => {
-    // Remove member from the group members list
-    setGroupMembersData(prev => prev.filter(member => member.id !== memberId));
-    
-    // Update group member count
-    const currentGroup = getGroupById(groupId);
-    if (currentGroup && currentGroup.members > 1) {
-      updateGroup(groupId, { 
-        members: currentGroup.members - 1 
-      });
-    }
-    
-    console.log(`Removed member ${memberId} from group ${groupId}`);
-  };
 
   const handleSendMessage = () => {
     if (newMessage.trim()) {
