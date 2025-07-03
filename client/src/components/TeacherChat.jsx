@@ -1,95 +1,35 @@
-import React, { useState } from 'react';
-import ChatSidebar from './chat/ChatSidebar';
-import ChatHeader from './chat/ChatHeader';
-import MessageList from './chat/MessageList';
-import MessageInput from './chat/MessageInput';
-import GroupFormModal from './modals/GroupFormModal';
-import DeleteConfirmModal from './modals/DeleteConfirmModal';
-import SettingsSidebar from './settings/SettingsSidebar';
-import GeneralSettings from './settings/GenralSetting';
-import MembersSettings from './settings/MembersSetting';
-import PrivacySettings from './settings/PravacySetting';
-import NotificationSettings from './settings/NotificationSetting';
-import { useModal } from '../hooks/useModal';
+import React, { useState } from "react";
+import ChatSidebar from "./chat/ChatSidebar";
+import ChatHeader from "./chat/ChatHeader";
+import MessageList from "./chat/MessageList";
+import MessageInput from "./chat/MessageInput";
+import DeleteConfirmModal from "./modals/DeleteConfirmModal";
+import { useModal } from "../hooks/useModal";
 
 const TeacherChat = () => {
-  console.log(teacherGroups)
-  const [newMessage, setNewMessage] = useState('');
+  const [newMessage, setNewMessage] = useState("");
 
-  const [newGroupForm, setNewGroupForm] = useState({ name: '', description: '', members: [] });
-  const [groupMembersData, setGroupMembersData] = useState(groupMembers);
+  const [newGroupForm, setNewGroupForm] = useState({
+    name: "",
+    description: "",
+    members: [],
+  });
 
-  const { groups, selectedGroup, setSelectedGroup, createGroup, updateGroup, deleteGroup, getGroupById } = useGroupManagement(teacherGroups);
   
+
   const createModal = useModal();
   const editModal = useModal();
   const deleteModal = useModal();
 
-  const currentGroup = getGroupById(selectedGroup);
-  const currentMessages = sampleMessages[selectedGroup] || [];
-
-  // Filter available members to exclude admin staff for teachers
-  const availableMembers = allStaffMembers.filter(member => 
-    member.department !== 'Administration' && member.department !== 'Facilities'
-  );
-
-  const handleCreateGroup = () => {
-    if (newGroupForm.name.trim() && newGroupForm.description.trim()) {
-      const newGroup = createGroup({
-        name: newGroupForm.name,
-        description: newGroupForm.description,
-        createdBy: 'You',
-        members: newGroupForm.members.length + 1 // +1 for the creator
-      });
-      setNewGroupForm({ name: '', description: '', members: [] });
-      createModal.closeModal();
-      setSelectedGroup(newGroup.id);
-    }
-  };
-
-  const handleEditGroup = () => {
-    if (editModal.data && newGroupForm.name.trim() && newGroupForm.description.trim()) {
-      updateGroup(editModal.data.id, {
-        name: newGroupForm.name,
-        description: newGroupForm.description
-      });
-      setNewGroupForm({ name: '', description: '', members: [] });
-      editModal.closeModal();
-    }
-  };
-
-  const handleDeleteGroup = () => {
-    if (deleteModal.data) {
-      deleteGroup(deleteModal.data.id);
-      deleteModal.closeModal();
-    }
-  };
-
-  const openEditModal = (group) => {
-    setNewGroupForm({
-      name: group.name,
-      description: group.description,
-      members: []
-    });
-    editModal.openModal(group);
-  };
-
- 
 
 
 
   const handleSendMessage = () => {
     if (newMessage.trim()) {
-      console.log('Sending message:', newMessage);
-      setNewMessage('');
+      console.log("Sending message:", newMessage);
+      setNewMessage("");
     }
   };
-
- 
-
- 
-
- 
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -97,57 +37,27 @@ const TeacherChat = () => {
         title="Teacher Portal"
         subtitle="Connect with colleagues"
         avatar="T"
-        groups={groups}
-        selectedGroup={selectedGroup}
-        onCreateGroup={createModal.openModal}
-        onEditGroup={openEditModal}
-        onDeleteGroup={deleteModal.openModal}
-        canModifyGroup={canModifyGroup}
+        
         theme="green"
       />
 
       <div className="flex-1 flex flex-col">
-       
-
-        <MessageList messages={currentMessages} theme="green" />
+        <MessageList  theme="green" />
 
         <MessageInput
           message={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           onSend={handleSendMessage}
-          onKeyPress={handleKeyPress}
           theme="green"
         />
       </div>
 
-      <GroupFormModal
-        isOpen={createModal.isOpen}
-        onClose={createModal.closeModal}
-        onSubmit={handleCreateGroup}
-        formData={newGroupForm}
-        setFormData={setNewGroupForm}     
-        title="Create New Group"
-        submitText="Create Group"
-        availableMembers={availableMembers}
-        theme="green"
-      />
 
-      <GroupFormModal
-        isOpen={editModal.isOpen}
-        onClose={editModal.closeModal}
-        onSubmit={handleEditGroup}
-        formData={newGroupForm}
-        setFormData={setNewGroupForm}
-        title="Edit Group"
-        submitText="Update Group"
-        availableMembers={availableMembers}
-        theme="green"
-      />
+      
 
       <DeleteConfirmModal
         isOpen={deleteModal.isOpen}
         onClose={deleteModal.closeModal}
-        onConfirm={handleDeleteGroup}
         groupName={deleteModal.data?.name}
       />
     </div>

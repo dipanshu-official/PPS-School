@@ -1,55 +1,61 @@
 import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import Avatar from '../common/Avatar';
-import { useSelector , useDispatch } from 'react-redux';
 import { userProfileDataSelector } from '../../store/globalSelctor';
 import { getUserProfile } from '../../store/globalAction';
-const MessageList = ({ messages, theme = 'blue' }) => {
-  const dispatch = useDispatch()
-  const user = useSelector(userProfileDataSelector)
-  console.log("user => ",user)
 
+const MessageList = ({ messages = [], theme = 'blue' }) => {
+  const dispatch = useDispatch();
+  const user = useSelector(userProfileDataSelector);
 
   useEffect(() => {
-    getUserProfile()
-  },[])
+    dispatch(getUserProfile());
+  }, [dispatch]);
 
   const themeClasses = {
     blue: 'bg-gradient-to-r from-principal-500 to-principal-600',
-    green: 'bg-gradient-to-r from-teacher-500 to-teacher-600'
+    green: 'bg-gradient-to-r from-teacher-500 to-teacher-600',
   };
 
-  const currentMessages = sampleMessages['all-teachers'] || [];
-
+  const getInitial = (name = '') => name.charAt(0).toUpperCase();
 
   return (
-    <div className=" overflow-y-auto p-4 space-y-6 bg-gradient-to-b from-gray-25 to-gray-50">
-      {currentMessages.map((message, index) => (
+    <div className="overflow-y-auto p-6 space-y-6 bg-gradient-to-b from-gray-50 to-gray-100 rounded-lg shadow-inner h-[80vh]">
+      {messages.map((message, index) => (
         <div
           key={message.id}
-          className={`flex message-enter ${message.isOwn ? 'justify-end' : 'justify-start'}`}
-          style={{ animationDelay: `${index * 0.1}s` }}
+          className={`flex transition-opacity duration-300 ease-out ${message.isOwn ? 'justify-end' : 'justify-start'} animate-fade-in`}
+          style={{ animationDelay: `${index * 0.05}s` }}
         >
-          <div className={`flex items-start space-x-3 max-w-2xl lg:max-w-3xl ${message.isOwn ? 'flex-row-reverse space-x-reverse' : ''}`}>
+          <div className={`flex items-start gap-4 max-w-2xl lg:max-w-3xl ${message.isOwn ? 'flex-row-reverse' : ''}`}>
+            
+            {/* Avatar */}
             <div className="flex-shrink-0">
-              <div className={`w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center text-sm lg:text-base font-bold shadow-medium ${
-                message.isOwn ? `${themeClasses[theme]} text-white` : 'bg-gradient-to-br from-gray-100 to-gray-200 text-gray-600'
-              }`}>
-                R
-              </div>
+              <Avatar
+                size="md"
+                name={message.sender || 'User'}
+                className={`${message.isOwn ? themeClasses[theme] + ' text-white' : 'bg-gray-200 text-gray-700'} font-bold shadow`}
+              >
+                {getInitial(message.sender)}
+              </Avatar>
             </div>
+
+            {/* Message Content */}
             <div className={`${message.isOwn ? 'text-right' : 'text-left'} flex-1`}>
-              <div className={`flex items-center space-x-2 mb-2 ${message.isOwn ? 'justify-end' : 'justify-start'}`}>
-                <span className="text-sm lg:text-base font-semibold text-gray-900">Sender</span>
-                <span className="text-xs lg:text-sm text-gray-500 font-medium">role</span>
-                <span className="text-xs lg:text-sm text-gray-400">{message.timestamp}</span>
+              <div className={`flex items-center gap-2 mb-1 ${message.isOwn ? 'justify-end' : 'justify-start'}`}>
+                <span className="text-sm font-semibold text-gray-900">{message.sender}</span>
+                <span className="text-xs text-gray-500 font-medium">{message.role}</span>
+                <span className="text-xs text-gray-400">{message.timestamp}</span>
               </div>
-              <div className={`relative p-4 lg:p-5 rounded-2xl shadow-soft transition-all duration-200 hover:shadow-medium ${
-                message.isOwn 
-                  ? `${themeClasses[theme]} text-white` 
-                  : 'bg-white border border-gray-100'
-              }`}>
-                <p className="text-sm lg:text-base leading-relaxed text-black">{message.message}</p>
-                
+
+              <div
+                className={`relative p-4 rounded-2xl shadow transition duration-200 ${
+                  message.isOwn
+                    ? `${themeClasses[theme]} text-white`
+                    : 'bg-white border border-gray-200 text-gray-800'
+                }`}
+              >
+                <p className="text-sm leading-relaxed">{message.message}</p>
               </div>
             </div>
           </div>

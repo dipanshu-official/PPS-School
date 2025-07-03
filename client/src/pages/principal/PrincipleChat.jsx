@@ -6,10 +6,10 @@ import MessageInput from "../../components/chat/MessageInput";
 import DeleteConfirmModal from "../../components/modals/DeleteConfirmModal";
 import { useModal } from "../../hooks/useModal";
 import { sendMessageFn } from "../../utils/utils";
-import GroupFormModal from "../../components/modals/GroupFormModal";
 
 const PrincipalChat = () => {
   const [newMessage, setNewMessage] = useState("");
+
 
   const [newGroupForm, setNewGroupForm] = useState({
     name: "",
@@ -64,7 +64,7 @@ const PrincipalChat = () => {
       <div className="flex-1 flex flex-col">
         {selectedChat && (
           <>
-            <MessageList messages={currentMessages} theme="blue" /> ,
+            <MessageList theme="blue" /> ,
             <MessageInput
               message={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
@@ -76,23 +76,9 @@ const PrincipalChat = () => {
         )}
       </div>
 
-      <GroupFormModal
-        isOpen={createModal.isOpen}
-        onClose={createModal.closeModal}
-        title="Create New Group"
-        submitText="Create Group"
-        theme="blue"
-      />
+     
 
-      <GroupFormModal
-        isOpen={editModal.isOpen}
-        onClose={editModal.closeModal}
-        formData={newGroupForm}
-        setFormData={setNewGroupForm}
-        title="Edit Group"
-        submitText="Update Group"
-        theme="blue"
-      />
+      
 
       <DeleteConfirmModal
         isOpen={deleteModal.isOpen}

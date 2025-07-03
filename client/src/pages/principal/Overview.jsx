@@ -31,7 +31,7 @@ const Overview = ({ onNavigate }) => {
   const quickActions = [
     { id: 'reports', icon: '📊', label: 'View Reports', description: 'Check school performance metrics' },
     { id: 'teachers', icon: '👥', label: 'Manage Teachers', description: 'Add, edit, or remove teachers' },
-    { id: 'chat', icon: '💬', label: 'Chat Groups', description: 'Create and manage teacher chat groups' },
+    { id: 'chat', icon: '💬', label: 'Chat ', description: 'Create and manage teacher chat groups' },
     { id: 'schedule', icon: '📅', label: 'Schedule Meeting', description: 'Plan meetings and events' },
     { id: 'announcements', icon: '📢', label: 'Send Announcement', description: 'Communicate with school community' }
   ];

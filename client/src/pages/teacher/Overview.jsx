@@ -38,7 +38,7 @@ const Overview = ({ onNavigate }) => {
     { id: 'assignments', icon: '📝', label: 'Create Assignment', description: 'Add new assignments for students' },
     { id: 'attendance', icon: '✅', label: 'Take Attendance', description: 'Mark student attendance' },
     { id: 'grades', icon: '📊', label: 'Grade Assignments', description: 'Review and grade submissions' },
-    { id: 'chat', icon: '💬', label: 'Student Chat Groups', description: 'Create and manage student chat groups' },
+    { id: 'chat', icon: '💬', label: 'Student Chat ', description: 'Create and manage student chat groups' },
     { id: 'students', icon: '👥', label: 'Manage Students', description: 'View and manage student records' }
   ];
 

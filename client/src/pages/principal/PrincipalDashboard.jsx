@@ -12,7 +12,7 @@ const PrincipalDashboard = () => {
     { id: 'teachers', label: 'Teachers', icon: '👥' },
     { id: 'students', label: 'Students', icon: '🎓' },
     { id: 'classes', label: 'Classes', icon: '🏫' },
-    { id: 'chat', label: 'Chat Groups', icon: '💬' },
+    { id: 'chat', label: 'Chat ', icon: '💬' },
     { id: 'reports', label: 'Reports', icon: '📈' },
     { id: 'settings', label: 'Settings', icon: '⚙️' }
   ];

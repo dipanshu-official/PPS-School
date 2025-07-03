@@ -11,7 +11,7 @@ const TeacherDashboard = () => {
     { id: 'overview', label: 'Overview', icon: '📊' },
     { id: 'students', label: 'Students', icon: '👥' },
     { id: 'classes', label: 'Classes', icon: '📚' },
-    { id: 'chat', label: 'Chat Groups', icon: '💬' },
+    { id: 'chat', label: 'Chat ', icon: '💬' },
     { id: 'assignments', label: 'Assignments', icon: '📝' },
     { id: 'grades', label: 'Grades', icon: '📊' },
     { id: 'attendance', label: 'Attendance', icon: '✅' }

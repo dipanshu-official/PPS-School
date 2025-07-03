@@ -6,6 +6,7 @@ import { allteacherDataSelector } from "../../store/globalSelctor";
 import { getAllTeacher } from "../../store/globalAction";
 
 const TeacherManagement = () => {
+
   
   const dispatch = useDispatch();
   const allTeacher = useSelector(allteacherDataSelector);
@@ -30,14 +31,14 @@ const TeacherManagement = () => {
 
   const handleDelete = (teacherId) => {
     if (window.confirm("Are you sure you want to delete this teacher?")) {
-      setTeachers(teachers.filter((teacher) => teacher.id !== teacherId));
+      (allTeacher.filter((teacher) => teacher.id !== teacherId));
     }
   };
 
   const handleSave = (teacherData) => {
     if (editingTeacher) {
       // Update existing teacher
-      setTeachers(
+      allTeacher(
         teachers.map((teacher) =>
           teacher.id === editingTeacher.id
             ? { ...teacher, ...teacherData }
@@ -50,7 +51,7 @@ const TeacherManagement = () => {
         id: Math.max(...teachers.map((t) => t.id)) + 1,
         ...teacherData,
       };
-      setTeachers([...teachers, newTeacher]);
+      ([...allTeacher, newTeacher]);
     }
     setShowModal(false);
   };

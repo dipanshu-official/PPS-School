@@ -15,8 +15,6 @@ const ChatSidebar = ({
   subtitle,
   avatar,
   selectedGroup,
-  onEditGroup,
-  onDeleteGroup,
   theme = "blue",
   showMessageBar,
 }) => {
@@ -109,9 +107,7 @@ const ChatSidebar = ({
           <div className="space-y-1">
             {visibleGroups.map((group) => (
               <div
-                onClick={() => {
-                  showMessageBar(true);
-                }}
+               
                 key={group._id}
                 className={`group relative p-2 lg:p-2 rounded-xl transition-all duration-200 hover-lift ${
                   selectedGroup === group._id
@@ -138,32 +134,7 @@ const ChatSidebar = ({
                   </p>
                 </button>
 
-                {/* {canModifyGroup(group) && (
-                  <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                    <div className="flex items-center space-x-1 bg-white rounded-lg shadow-medium p-1">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onEditGroup(group);
-                        }}
-                        className={`p-2 text-gray-400 ${colors.hover} transition-colors duration-200 rounded-md hover:bg-gray-50`}
-                        title="Edit Group"
-                      >
-                        ✏️
-                      </button>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onDeleteGroup(group);
-                        }}
-                        className="p-2 text-gray-400 hover:text-red-600 transition-colors duration-200 rounded-md hover:bg-red-50"
-                        title="Delete Group"
-                      >
-                        🗑️
-                      </button>
-                    </div>
-                  </div>
-                )} */}
+                
               </div>
             ))}
           </div>
