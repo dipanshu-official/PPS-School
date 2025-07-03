@@ -3,22 +3,19 @@ import ChatSidebar from "../../components/chat/ChatSidebar";
 import ChatHeader from "../../components/chat/ChatHeader";
 import MessageList from "../../components/chat/MessageList";
 import MessageInput from "../../components/chat/MessageInput";
-import DeleteConfirmModal from "../../components/modals/DeleteConfirmModal";
 import { useModal } from "../../hooks/useModal";
 import { sendMessageFn } from "../../utils/utils";
 
 const PrincipalChat = () => {
   const [newMessage, setNewMessage] = useState("");
 
-
   const [newGroupForm, setNewGroupForm] = useState({
     name: "",
     description: "",
     members: [],
   });
-  
+
   const [selectedChat, setSelectedChat] = useState(false);
- 
 
   const createModal = useModal();
   const editModal = useModal();
@@ -64,6 +61,7 @@ const PrincipalChat = () => {
       <div className="flex-1 flex flex-col">
         {selectedChat && (
           <>
+            <ChatHeader />
             <MessageList theme="blue" /> ,
             <MessageInput
               message={newMessage}
@@ -75,16 +73,6 @@ const PrincipalChat = () => {
           </>
         )}
       </div>
-
-     
-
-      
-
-      <DeleteConfirmModal
-        isOpen={deleteModal.isOpen}
-        onClose={deleteModal.closeModal}
-        groupName={deleteModal.data?.name}
-      />
     </div>
   );
 };

@@ -1,12 +1,10 @@
 import React, { useEffect } from "react";
-import Button from "../common/Button";
 import { useSelector, useDispatch } from "react-redux";
 import {
   allstudentDataSelector,
   allteacherDataSelector,
 } from "../../store/globalSelctor";
 import { getAllStudent, getAllTeacher } from "../../store/globalAction";
-import { useState } from "react";
 import { io } from "socket.io-client";
 import { setSocket } from "../../store/socketSlice";
 
@@ -15,6 +13,7 @@ const ChatSidebar = ({
   subtitle,
   avatar,
   selectedGroup,
+  onGroupSelect,
   theme = "blue",
   showMessageBar,
 }) => {
@@ -38,27 +37,29 @@ const ChatSidebar = ({
   };
 
   const dispatch = useDispatch();
-
   const role = localStorage.getItem("role");
   const allteacher = useSelector(allteacherDataSelector);
   const allstudent = useSelector(allstudentDataSelector);
   const { socket } = useSelector((store) => store.socket);
 
+  // Initialize socket connection
   useEffect(() => {
-    if (allteacher) {
+    const currentUser = role === "teacher" ? allteacher : allstudent;
+    
+    if (currentUser && currentUser._id) {
       const socketio = io("http://localhost:5000", {
         query: {
-          userId: allteacher._id,
+          userId: currentUser._id,
         },
       });
       dispatch(setSocket(socketio));
-    } else {
-      if (socket) {
-        socket.close();
-        dispatch(setSocket(null));
-      }
+
+      // Cleanup on unmount
+      return () => {
+        socketio.close();
+      };
     }
-  }, []);
+  }, [allteacher, allstudent, role, dispatch]);
 
   // Fetch data based on role
   useEffect(() => {
@@ -74,11 +75,22 @@ const ChatSidebar = ({
   // Select correct data to display
   const visibleGroups = role === "teacher" ? allstudent : allteacher;
 
+  const handleGroupClick = (group) => {
+    if (onGroupSelect) {
+      onGroupSelect(group);
+    }
+  };
+
+  const formatTime = (timestamp) => {
+    if (!timestamp) return '';
+    const date = new Date(timestamp);
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  };
+
   return (
     <div className="w-80 lg:w-96 bg-white border-r border-gray-200 flex flex-col shadow-medium">
       {/* Header */}
       <div className="p-4 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
-        {/* Avatar & Title */}
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-4">
             <div
@@ -102,39 +114,42 @@ const ChatSidebar = ({
       <div className="flex-1 overflow-y-auto">
         <div className="p-2">
           <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4 lg:mb-6">
-            Chat Groups ({visibleGroups.length})
+            Chat Groups ({visibleGroups?.length || 0})
           </h3>
           <div className="space-y-1">
-            {visibleGroups.map((group) => (
+            {visibleGroups?.map((group) => (
               <div
-               
                 key={group._id}
-                className={`group relative p-2 lg:p-2 rounded-xl transition-all duration-200 hover-lift ${
+                className={`group relative p-2 lg:p-3 rounded-xl transition-all duration-200 hover-lift cursor-pointer ${
                   selectedGroup === group._id
-                    ? `${colors.selected} border-2 bg-blue-500`
-                    : "hover:bg-gray-50 border-2 border-transparent "
+                    ? colors.selected
+                    : "hover:bg-gray-50 border-2 border-transparent"
                 }`}
+                onClick={() => handleGroupClick(group)}
               >
-                <button className="w-full text-left">
+                <div className="w-full text-left">
                   <div className="flex items-center justify-between mb-2">
                     <span className="font-semibold text-gray-900 text-base lg:text-lg">
-                      {group.firstName}
+                      {group.firstName} {group.lastName}
                     </span>
                     <div className="flex items-center space-x-2">
+                      {group.isOnline && (
+                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      )}
                       <span className="text-xs lg:text-sm text-gray-500 font-medium">
-                        {group.email}
+                        {formatTime(group.updatedAt)}
                       </span>
                     </div>
                   </div>
-                  <p className="text-sm lg:text-base text-gray-600 truncate mb-2">
-                    {group.lastMessage}
+                  <p className="text-sm text-gray-500 mb-1">
+                    {group.email}
                   </p>
-                  <p className="text-xs lg:text-sm text-gray-400 font-medium">
-                    {group.updatedAt}
-                  </p>
-                </button>
-
-                
+                  {group.lastMessage && (
+                    <p className="text-sm lg:text-base text-gray-600 truncate">
+                      {group.lastMessage}
+                    </p>
+                  )}
+                </div>
               </div>
             ))}
           </div>
