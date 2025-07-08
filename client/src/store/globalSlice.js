@@ -18,9 +18,8 @@ const initialState = {
   currentstudent: [],
   delstudent: [],
   delteacher: [],
-
+  loading: false,
   teacherData: null,
-
   allTeacher: [],
   allStudent: [],
 };
@@ -33,11 +32,11 @@ const globalSlice = createSlice({
     clearError: (state) => {
       state.error = null;
     },
-    clearStudents: (state) => {
-      state.students = [];
+    showLoader: (state) => {
+      state.loading = true;
     },
-    setCurrentUser: (state, action) => {
-      state.teacherData = action.payload;
+    hideLoader: (state) => {
+      state.loading = false;
     },
   },
   extraReducers: (builder) => {
@@ -80,7 +79,7 @@ const globalSlice = createSlice({
   },
 });
 
-export const { clearError, clearStudents, setCurrentUser } =
+export const { clearError, showLoader, hideLoader } =
   globalSlice.actions;
 
 export default globalSlice.reducer;

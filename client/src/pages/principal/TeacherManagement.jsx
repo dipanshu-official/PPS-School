@@ -5,10 +5,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { allteacherDataSelector } from "../../store/globalSelctor";
 import { getAllTeacher } from "../../store/globalAction";
 import { deleteTeacher } from "../../store/globalAction";
+import { showLoader, hideLoader } from "../../store/globalSlice";
+import Loader from "../../components/Loader";
+import toast from "react-hot-toast";
 
 const TeacherManagement = () => {
-
-  
   const dispatch = useDispatch();
   const allTeacher = useSelector(allteacherDataSelector);
 
@@ -29,9 +30,18 @@ const TeacherManagement = () => {
     setShowModal(true);
   };
 
-  const handleDelete = (teacherId) => {
-    console.log(teacherId)
-    dispatch(deleteTeacher(teacherId))
+  const handleDelete = async (teacherId) => {
+    try {
+      await dispatch(deleteTeacher(teacherId)).unwrap();
+
+      // Simulate delay after success
+    } catch (error) {
+      console.error("Delete failed:", error);
+    } finally {
+      toast.success("teacher delete successfully")
+      
+      window.location.reload()
+    }
   };
 
   const handleSave = (teacherData) => {
@@ -50,7 +60,7 @@ const TeacherManagement = () => {
         id: Math.max(...teachers.map((t) => t.id)) + 1,
         ...teacherData,
       };
-      ([...allTeacher, newTeacher]);
+      [...allTeacher, newTeacher];
     }
     setShowModal(false);
   };

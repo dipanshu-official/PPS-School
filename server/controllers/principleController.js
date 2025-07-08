@@ -158,4 +158,13 @@ export const logoutData = async (req, res) => {
       error: process.env.NODE_ENV === "development" ? error.message : undefined,
     });
   }
-};
+}
+
+export const currentUser = async (req , res) => {
+  try {
+
+  } catch (error) {
+    console.log(error)
+  }
+  
+}

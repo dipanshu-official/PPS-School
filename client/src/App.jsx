@@ -8,11 +8,13 @@ import StudentDashboard from "./pages/student/StudentDashboard";
 import PrivateRoute from "./pages/PrivateRoute";
 import { Toaster } from "react-hot-toast";
 import { io } from "socket.io-client";
+import Loader from "./components/Loader";
 
 const App = () => {
   return (
     <>
       <Toaster position="top-center" />
+      {/* <Loader/> */}
       <Router>
         <Routes>
           <Route path="*" element={<LoginPage />} />
