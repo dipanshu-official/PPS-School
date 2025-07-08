@@ -236,6 +236,29 @@ export const loginTeacher = createAsyncThunk(
   }
 );
 
+export const deleteTeacher = createAsyncThunk(
+  "deleteTeacher/teacher",
+  async (teacherId, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.delete(
+        `/deleteteacher/${teacherId}`,
+        {
+          headers: {
+            Authorization: getAuthHeaders(),
+          },
+        }
+      );
+      console.log("getAuthHeaders =>", getAuthHeaders());
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to delete"
+      );
+    }
+  }
+);
+
 // principal api section
 export const loginPrinciple = createAsyncThunk(
   "loginPrinciple/login-principle",

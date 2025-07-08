@@ -34,8 +34,6 @@ const DashboardLayout = ({
     }
   }, [dispatch]);
 
-  console.log("currentStudent=>", currentStudent);
-
   // Update user state when userProfile changes
   useEffect(() => {
     if (userProfile && userProfile._id) {

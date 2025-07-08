@@ -30,7 +30,7 @@ const TeacherCard = ({ teacher, onEdit, onDelete }) => {
             </svg>
           </button>
           <button
-            onClick={() => onDelete(teacher.id)}
+            onClick={() => onDelete(teacher._id)}
             className="text-red-600 hover:text-red-700 p-2 rounded-lg hover:bg-red-50 transition-all duration-200 group"
             title="Delete Teacher"
           >

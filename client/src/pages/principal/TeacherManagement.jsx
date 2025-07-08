@@ -4,13 +4,13 @@ import TeacherModal from "../../components/modals/TeacherModal";
 import { useDispatch, useSelector } from "react-redux";
 import { allteacherDataSelector } from "../../store/globalSelctor";
 import { getAllTeacher } from "../../store/globalAction";
+import { deleteTeacher } from "../../store/globalAction";
 
 const TeacherManagement = () => {
 
   
   const dispatch = useDispatch();
   const allTeacher = useSelector(allteacherDataSelector);
-  console.log("allTeacher =>", allTeacher);
 
   useEffect(() => {
     dispatch(getAllTeacher());
@@ -30,9 +30,8 @@ const TeacherManagement = () => {
   };
 
   const handleDelete = (teacherId) => {
-    if (window.confirm("Are you sure you want to delete this teacher?")) {
-      (allTeacher.filter((teacher) => teacher.id !== teacherId));
-    }
+    console.log(teacherId)
+    dispatch(deleteTeacher(teacherId))
   };
 
   const handleSave = (teacherData) => {

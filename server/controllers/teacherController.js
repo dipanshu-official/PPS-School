@@ -271,6 +271,7 @@ export const updateTeacherPassword = async (req, res) => {
 export const deleteTeacher = async (req, res) => {
   try {
     const { id } = req.params;
+    console.log("Received delete request with ID:", req.params.id);
 
     const teacher = await Teacher.findByIdAndDelete(id);
     if (!teacher) {

@@ -6,6 +6,7 @@ import {
   getAllTeacher,
   getAllStudent,
   deleteStudent,
+  deleteTeacher,
   getUserProfile,
   getCurrentStudent,
 } from "./globalAction";
@@ -16,6 +17,8 @@ const initialState = {
   studentData: null,
   currentstudent: [],
   delstudent: [],
+  delteacher: [],
+
   teacherData: null,
 
   allTeacher: [],
@@ -51,6 +54,12 @@ const globalSlice = createSlice({
       const deletedId = action.payload.id;
       state.delstudent = state.delstudent.filter(
         (student) => student._id !== deletedId
+      );
+    });
+    builder.addCase(deleteTeacher.fulfilled, (state, action) => {
+      const deletedId = action.payload.id;
+      state.delteacher = state.delteacher.filter(
+        (teacher) => teacher._id !== deletedId
       );
     });
     builder.addCase(loginTeacher.fulfilled, (state, action) => {

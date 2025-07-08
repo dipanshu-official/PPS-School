@@ -25,7 +25,7 @@ router.get("/department/:department", getTeachersByDepartment);
 router.get("/:id", getTeacherById);
 router.put("/:id", updateTeacher);
 router.put("/:id/password", updateTeacherPassword);
-router.delete("/:id", deleteTeacher);
+router.delete("/deleteteacher/:id", deleteTeacher);
 
 
 export default router;
